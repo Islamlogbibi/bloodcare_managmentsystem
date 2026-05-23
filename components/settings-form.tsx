@@ -7,24 +7,21 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Save, User, Bell, Database } from "lucide-react"
+import { Save, User, Bell, Database, Globe } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
+import { useLanguage } from "@/contexts/language-context"
 
-// Available languages
-const languages = {
+// Additional settings translations
+const settingsTranslations = {
   en: {
-    name: "English",
     profileSettings: "Profile Settings",
     updatePersonalInfo: "Update your personal information",
     fullName: "Full Name",
-    email: "Email",
-    phone: "Phone",
     department: "Department",
     saveProfile: "Save Profile",
     saving: "Saving...",
     notificationSettings: "Notification Settings",
     configureNotifications: "Configure your notification preferences",
-    emailNotifications: "Email Notifications",
     receiveEmailAlerts: "Receive email alerts for important events",
     urgentCaseAlerts: "Urgent Case Alerts",
     getNotifiedEmergency: "Get notified of emergency transfusions",
@@ -35,24 +32,23 @@ const languages = {
     systemSettings: "System Settings",
     configureSystem: "Configure system preferences",
     timezone: "Timezone",
-    language: "Language",
     dateFormat: "Date Format",
     autoSave: "Auto-save",
     automaticallySave: "Automatically save changes",
+    selectLanguage: "Select Language",
+    english: "English",
+    french: "Français",
+    arabic: "العربية",
   },
   fr: {
-    name: "Français",
     profileSettings: "Paramètres du Profil",
     updatePersonalInfo: "Mettre à jour vos informations personnelles",
     fullName: "Nom Complet",
-    email: "Email",
-    phone: "Téléphone",
     department: "Département",
     saveProfile: "Enregistrer le Profil",
     saving: "Enregistrement...",
     notificationSettings: "Paramètres de Notification",
     configureNotifications: "Configurez vos préférences de notification",
-    emailNotifications: "Notifications par Email",
     receiveEmailAlerts: "Recevoir des alertes par email pour les événements importants",
     urgentCaseAlerts: "Alertes de Cas Urgents",
     getNotifiedEmergency: "Être notifié des transfusions d'urgence",
@@ -63,42 +59,45 @@ const languages = {
     systemSettings: "Paramètres du Système",
     configureSystem: "Configurer les préférences du système",
     timezone: "Fuseau Horaire",
-    language: "Langue",
     dateFormat: "Format de Date",
     autoSave: "Sauvegarde Automatique",
     automaticallySave: "Enregistrer automatiquement les modifications",
+    selectLanguage: "Sélectionner la Langue",
+    english: "English",
+    french: "Français",
+    arabic: "العربية",
   },
-  es: {
-    name: "Español",
-    profileSettings: "Configuración de Perfil",
-    updatePersonalInfo: "Actualice su información personal",
-    fullName: "Nombre Completo",
-    email: "Correo Electrónico",
-    phone: "Teléfono",
-    department: "Departamento",
-    saveProfile: "Guardar Perfil",
-    saving: "Guardando...",
-    notificationSettings: "Configuración de Notificaciones",
-    configureNotifications: "Configure sus preferencias de notificación",
-    emailNotifications: "Notificaciones por Correo",
-    receiveEmailAlerts: "Recibir alertas por correo para eventos importantes",
-    urgentCaseAlerts: "Alertas de Casos Urgentes",
-    getNotifiedEmergency: "Recibir notificaciones de transfusiones de emergencia",
-    dailyReports: "Informes Diarios",
-    receiveDailySummary: "Recibir informes diarios",
-    systemMaintenance: "Mantenimiento del Sistema",
-    notificationsAboutSystem: "Notificaciones sobre actualizaciones del sistema",
-    systemSettings: "Configuración del Sistema",
-    configureSystem: "Configure las preferencias del sistema",
-    timezone: "Zona Horaria",
-    language: "Idioma",
-    dateFormat: "Formato de Fecha",
-    autoSave: "Guardado Automático",
-    automaticallySave: "Guardar cambios automáticamente",
+  ar: {
+    profileSettings: "إعدادات الملف الشخصي",
+    updatePersonalInfo: "تحديث معلوماتك الشخصية",
+    fullName: "الاسم الكامل",
+    department: "القسم",
+    saveProfile: "حفظ الملف الشخصي",
+    saving: "جاري الحفظ...",
+    notificationSettings: "إعدادات الإخطارات",
+    configureNotifications: "قم بتكوين تفضيلات الإخطارات الخاصة بك",
+    receiveEmailAlerts: "تلقي تنبيهات البريد الإلكتروني للأحداث المهمة",
+    urgentCaseAlerts: "تنبيهات الحالات الطارئة",
+    getNotifiedEmergency: "تلقي إشعارات نقل الدم الطارئ",
+    dailyReports: "التقارير اليومية",
+    receiveDailySummary: "استقبال التقارير اليومية",
+    systemMaintenance: "صيانة النظام",
+    notificationsAboutSystem: "إشعارات حول تحديثات النظام",
+    systemSettings: "إعدادات النظام",
+    configureSystem: "قم بتكوين تفضيلات النظام",
+    timezone: "المنطقة الزمنية",
+    dateFormat: "صيغة التاريخ",
+    autoSave: "الحفظ التلقائي",
+    automaticallySave: "حفظ التغييرات تلقائيًا",
+    selectLanguage: "اختر اللغة",
+    english: "English",
+    french: "Français",
+    arabic: "العربية",
   },
 }
 
 export function SettingsForm() {
+  const { language, setLanguage, t } = useLanguage()
   const [isLoading, setIsLoading] = useState(false)
   const [profileData, setProfileData] = useState({
     fullName: "Pr. brouk hacene",
@@ -107,12 +106,7 @@ export function SettingsForm() {
     department: "hemobiology",
   })
 
- 
-
- 
-
-  // Current language text based on system settings
-  const [currentLang, setCurrentLang] = useState(languages.fr)
+  const currentLang = settingsTranslations[language as keyof typeof settingsTranslations]
 
   useEffect(() => {
     // Load saved settings from localStorage if available
@@ -153,6 +147,16 @@ export function SettingsForm() {
     }
   }
 
+  const handleLanguageChange = (newLanguage: string) => {
+    setLanguage(newLanguage as "en" | "fr" | "ar")
+    // Save to localStorage
+    const settings = JSON.parse(localStorage.getItem("systemSettings") || "{}")
+    settings.language = newLanguage
+    localStorage.setItem("systemSettings", JSON.stringify(settings))
+    // Dispatch custom event
+    window.dispatchEvent(new CustomEvent("languageChanged", { detail: { language: newLanguage } }))
+  }
+
   
 
   
@@ -178,7 +182,7 @@ export function SettingsForm() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">{currentLang.email}</Label>
+            <Label htmlFor="email">{t("email")}</Label>
             <Input
               id="email"
               type="email"
@@ -187,7 +191,7 @@ export function SettingsForm() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="phone">{currentLang.phone}</Label>
+            <Label htmlFor="phone">{t("phone")}</Label>
             <Input
               id="phone"
               type="tel"
@@ -219,6 +223,40 @@ export function SettingsForm() {
         </CardContent>
       </Card>
 
+      {/* Language Settings */}
+      <Card className="border-0 shadow-md">
+        <CardHeader>
+          <CardTitle className="flex items-center text-gray-900">
+            <Globe className="mr-2 h-5 w-5 text-blue-600" />
+            {currentLang.selectLanguage}
+          </CardTitle>
+          <CardDescription>{t("language")}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="language">{t("selectLanguage")}</Label>
+            <Select value={language} onValueChange={handleLanguageChange}>
+              <SelectTrigger id="language">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="en">{currentLang.english}</SelectItem>
+                <SelectItem value="fr">{currentLang.french}</SelectItem>
+                <SelectItem value="ar">{currentLang.arabic}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="rounded-lg bg-blue-50 p-3 text-sm text-blue-700">
+            <p>
+              {language === "en"
+                ? "Language changed. The interface will update to reflect your selection."
+                : language === "fr"
+                  ? "Langue modifiée. L'interface sera mise à jour pour refléter votre sélection."
+                  : "تم تغيير اللغة. سيتم تحديث الواجهة لتعكس اختيارك."}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

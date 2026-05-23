@@ -7,6 +7,7 @@ import { Sidebar } from "@/components/sidebar"
 import { Header } from "@/components/header"
 import { Toaster } from "@/components/ui/toaster"
 import { LanguageProvider } from "@/contexts/language-context"
+import { LanguageInitializer } from "@/components/language-initializer"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -66,14 +67,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" dir="ltr" suppressHydrationWarning className="ltr">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <LanguageProvider>
+            <LanguageInitializer />
             <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
               <Sidebar />
               <div className="flex flex-col flex-1 overflow-hidden">

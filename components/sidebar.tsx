@@ -6,30 +6,32 @@ import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Home, Users, Clock, Calendar, BarChart3, Settings, X, Menu, Heart, Activity, TrendingUp } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
 
 export function Sidebar() {
   const pathname = usePathname()
+  const { t } = useLanguage()
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   const navigation = [
-    { name: "Tableau de Bord", href: "/", icon: Home, description: "Vue d'ensemble et statistiques" },
-    { name: "Patients", href: "/patients", icon: Users, description: "Gérer les dossiers patients" },
+    { name: t("dashboard"), href: "/", icon: Home, description: t("dashboard") },
+    { name: t("patients"), href: "/patients", icon: Users, description: t("patients") },
     {
-      name: "Planning d'Aujourd'hui",
+      name: t("todayTransfusions"),
       href: "/transfusions/today",
       icon: Clock,
-      description: "Rendez-vous d'aujourd'hui",
+      description: t("todayTransfusions"),
     },
     {
-      name: "Planning de Demain",
+      name: t("tomorrowTransfusions"),
       href: "/transfusions/tomorrow",
       icon: Calendar,
-      description: "Rendez-vous de demain",
+      description: t("tomorrowTransfusions"),
     },
-    { name: "Historique", href: "/history", icon: BarChart3, description: "Voir l'historique" },
-    { name: "Analyse", href: "/analytics", icon: TrendingUp, description: "Analyses et rapports détaillés" },
-    { name: "Paramètres", href: "/settings", icon: Settings, description: "Paramètres de l'application" },
+    { name: t("history"), href: "/history", icon: BarChart3, description: t("history") },
+    { name: t("analytics"), href: "/analytics", icon: TrendingUp, description: t("analytics") },
+    { name: t("settings"), href: "/settings", icon: Settings, description: t("settings") },
   ]
 
   return (
@@ -148,8 +150,8 @@ export function Sidebar() {
               <Activity className="h-4 w-4 text-green-600 animate-pulse" aria-hidden="true" />
               {!isCollapsed && (
                 <div className="animate-fade-in">
-                  <span className="text-sm font-medium text-blue-900">État du Système</span>
-                  <p className="text-xs text-blue-700 mt-1">Tous les systèmes opérationnels</p>
+                  <span className="text-sm font-medium text-blue-900">{t("info")}</span>
+                  <p className="text-xs text-blue-700 mt-1">{t("success")}</p>
                 </div>
               )}
             </div>

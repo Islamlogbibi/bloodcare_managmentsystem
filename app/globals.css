@@ -166,3 +166,58 @@ html {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* RTL Support */
+html.rtl {
+  direction: rtl;
+  text-align: right;
+  font-family: 'Cairo', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+html.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+/* RTL Mirror margins and padding */
+html.rtl [class*="mr-"] {
+  margin-right: 0;
+}
+
+html.rtl [class*="ml-"] {
+  margin-left: 0;
+}
+
+html.rtl [class*="pl-"] {
+  padding-left: 0;
+}
+
+html.rtl [class*="pr-"] {
+  padding-right: 0;
+}
+
+/* RTL position adjustments */
+html.rtl .left-0 { 
+  right: 0;
+  left: auto;
+}
+
+html.rtl .right-0 { 
+  left: 0;
+  right: auto;
+}
+
+html.rtl .left-4 { 
+  right: 1rem;
+  left: auto;
+}
+
+html.rtl .left-2 {
+  right: 0.5rem;
+  left: auto;
+}
+
+html.rtl [class*="left-"] {
+  right: var(--offset, 0);
+  left: auto;
+}

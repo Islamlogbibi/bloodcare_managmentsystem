@@ -50,6 +50,9 @@ const translations = {
     create: "Create",
     update: "Update",
     remove: "Remove",
+    back: "Back to Patients",
+    age: "Age",
+    years: "years",
 
     // Common
     loading: "Loading...",
@@ -220,7 +223,7 @@ const translations = {
     confirmDelete: "Are you sure you want to delete this?",
     confirmLogout: "Are you sure you want to logout?",
     invalidInput: "Invalid input",
-    required: "This field is required",
+    required: "Please fill in all required fields marked with an asterisk (*)",
   },
   fr: {
     // Navigation
@@ -261,6 +264,9 @@ const translations = {
     create: "Créer",
     update: "Mettre à Jour",
     remove: "Retirer",
+    back: "Retour aux Patients",
+    age: "Âge",
+    years: "ans",
 
     // Common
     loading: "Chargement...",
@@ -431,7 +437,7 @@ const translations = {
     confirmDelete: "Êtes-vous sûr de vouloir supprimer ceci?",
     confirmLogout: "Êtes-vous sûr de vouloir vous déconnecter?",
     invalidInput: "Entrée invalide",
-    required: "Ce champ est obligatoire",
+    required: "Veuillez remplir tous les champs obligatoires marqués d'un astérisque (*)",
   },
   ar: {
     // Navigation
@@ -472,6 +478,9 @@ const translations = {
     create: "إنشاء",
     update: "تحديث",
     remove: "إزالة",
+    back: "العودة إلى المرضى",
+    age: "العمر",
+    years: "سنة",
 
     // Common
     loading: "جاري التحميل...",
@@ -642,7 +651,7 @@ const translations = {
     confirmDelete: "هل أنت متأكد من حذف هذا؟",
     confirmLogout: "هل أنت متأكد من تسجيل الخروج؟",
     invalidInput: "إدخال غير صالح",
-    required: "هذا الحقل مطلوب",
+    required: "يرجى ملء جميع الحقول الإلزامية المميزة بعلامة النجمة (*)",
   },
 }
 

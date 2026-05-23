@@ -14,12 +14,14 @@ import { cn } from "@/lib/utils"
 import { scheduleTransfusion } from "@/app/lib/actions"
 import { useRouter } from "next/navigation"
 import { toast } from "@/hooks/use-toast"
+import { useLanguage } from "@/contexts/language-context"
 
 interface TransfusionScheduleFormProps {
   patient: any
 }
 
 export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProps) {
+  const { t } = useLanguage()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [scheduledDate, setScheduledDate] = useState<Date | undefined>(undefined)
@@ -45,15 +47,15 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
 
       await scheduleTransfusion(transfusionData)
       toast({
-        title: "Transfusion Planifiée",
-        description: "La transfusion a été planifiée avec succès.",
+        title: t("scheduleTransfusion"),
+        description: "Transfusion scheduled successfully",
       })
 
       router.push("/transfusions/today")
     } catch (error) {
       toast({
-        title: "Erreur",
-        description: "Une erreur s'est produite. Veuillez réessayer.",
+        title: t("error"),
+        description: "An error occurred. Please try again.",
         variant: "destructive",
       })
     } finally {
@@ -69,14 +71,14 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
           <Input value={`${patient.firstName} ${patient.lastName}`} disabled />
         </div>
         <div className="space-y-2">
-          <Label>Groupe Sanguin</Label>
+          <Label>{t("bloodType")}</Label>
           <Input value={patient.bloodType} disabled />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Date Prévue *</Label>
+          <Label>{t("selectDate")} *</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -84,7 +86,7 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
                 className={cn("w-full justify-start text-left font-normal", !scheduledDate && "text-muted-foreground")}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {scheduledDate ? format(scheduledDate, "PPP") : "Sélectionner une date"}
+                {scheduledDate ? format(scheduledDate, "PPP") : t("selectDate")}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
@@ -99,47 +101,47 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
           </Popover>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="scheduledTime">Heure Prévue *</Label>
+          <Label htmlFor="scheduledTime">{t("selectTime")} *</Label>
           <Input id="scheduledTime" name="scheduledTime" type="time" required />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="priority">Priorité *</Label>
+          <Label htmlFor="priority">Priority *</Label>
           <Select name="priority" defaultValue="regular">
             <SelectTrigger>
-              <SelectValue placeholder="Sélectionner la priorité" />
+              <SelectValue placeholder={t("selectType")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="regular">Normale</SelectItem>
-              <SelectItem value="urgent">Urgente</SelectItem>
+              <SelectItem value="regular">{t("regular")}</SelectItem>
+              <SelectItem value="urgent">{t("urgent")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="bloodUnits">Unités de Sang *</Label>
+          <Label htmlFor="bloodUnits">Blood Units *</Label>
           <Input id="bloodUnits" name="bloodUnits" type="number" min="1" max="10" defaultValue="1" required />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="notes">Notes</Label>
+        <Label htmlFor="notes">{t("notes")}</Label>
         <Textarea
           id="notes"
           name="notes"
           rows={4}
-          placeholder="Entrez toute instruction spéciale ou note concernant la transfusion..."
+          placeholder="Enter any special instructions or notes about the transfusion..."
         />
       </div>
 
       <div className="flex justify-end space-x-4">
         <Button type="button" variant="outline" onClick={() => router.back()}>
-          Annuler
+          {t("cancel")}
         </Button>
         <Button type="submit" disabled={isLoading || !scheduledDate} className="bg-red-600 hover:bg-red-700">
           <Save className="mr-2 h-4 w-4" />
-          {isLoading ? "Planification..." : "Planifier la Transfusion"}
+          {isLoading ? t("scheduleTransfusion") + "..." : t("scheduleTransfusion")}
         </Button>
       </div>
     </form>

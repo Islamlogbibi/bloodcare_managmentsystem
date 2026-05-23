@@ -336,7 +336,7 @@ export default function CalendarHistoryPage() {
       <div className="flex-1 space-y-4">
         <div className="no-print flex justify-between items-center">
           <h2 className="text-xl font-semibold">
-            Patients du {format(selectedDate, "yyyy-MM-dd")}
+            {t("patientsFrom")} {format(selectedDate, "yyyy-MM-dd")}
           </h2>
           <div className="flex justify-end mb-4 print:hidden">
             <PrintButton />
@@ -371,20 +371,20 @@ export default function CalendarHistoryPage() {
               <Table>
                 <TableHeader className="bg-gray-50">
                   <TableRow>
-                    <TableHead className="font-semibold text-gray-900">H.dist</TableHead>
-                    <TableHead className="font-semibold text-gray-900">H.reçu</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("hdist")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("hreceived")}</TableHead>
                     <TableHead className="font-semibold text-gray-900">Patient</TableHead>
-                    <TableHead className="font-semibold text-gray-900">Groupe sanguin</TableHead>
-                    <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
-                    <TableHead className="font-semibold text-gray-900">F</TableHead>
-                    <TableHead className="font-semibold text-gray-900">C</TableHead>
-                    <TableHead className="font-semibold text-gray-900">L</TableHead>
-                    <TableHead className="font-semibold text-gray-900">Priorité</TableHead>
-                    <TableHead className="font-semibold text-gray-900">Poches</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("bloodType")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("phenotype")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("hasF")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("hasC")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("hasL")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("priority")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("bags")}</TableHead>
                     <TableHead className="font-semibold text-gray-900">Hb</TableHead>
                     <TableHead className="font-semibold text-gray-900">Don</TableHead>
-                    <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
-                    <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Présence</TableHead>
+                    <TableHead className="font-semibold text-gray-900 print:hidden">{t("actions")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Presence</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

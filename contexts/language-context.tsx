@@ -224,6 +224,8 @@ const translations = {
     hdist: "H.dist",
     hreceived: "H.received",
     noTransfusionFound: "No transfusion found.",
+    patientsFrom: "Patients from",
+    phenotype: "Phenotype",
 
     // Messages
     success: "Success",
@@ -448,6 +450,8 @@ const translations = {
     hdist: "H.dist",
     hreceived: "H.reçu",
     noTransfusionFound: "Aucune transfusion trouvée.",
+    patientsFrom: "Patients du",
+    phenotype: "Phénotype",
 
     // Messages
     success: "Succès",
@@ -672,6 +676,8 @@ const translations = {
     hdist: "H.dist",
     hreceived: "H.مستقبل",
     noTransfusionFound: "لم يتم العثور على أي نقل دم.",
+    patientsFrom: "المرضى من",
+    phenotype: "النمط الظاهري",
 
     // Messages
     success: "نجح",

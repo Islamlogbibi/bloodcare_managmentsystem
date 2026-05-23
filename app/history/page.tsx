@@ -48,8 +48,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { PlusCircle, Search, Loader2, Trash2 } from "lucide-react"
 import PrintStyles from "./style"
 import PrintButton from "./button"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function CalendarHistoryPage() {
+  const { t } = useLanguage()
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [patients, setPatients] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -170,9 +172,9 @@ export default function CalendarHistoryPage() {
     }
   }
 
-  const filteredPatients = allPatients.filter(p => 
+  const filteredPatients = Array.isArray(allPatients) ? allPatients.filter(p => 
     `${p.firstName} ${p.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  ) : []
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 p-6">
@@ -188,21 +190,21 @@ export default function CalendarHistoryPage() {
           <DialogTrigger asChild>
             <Button className="w-full flex items-center gap-2 bg-transparent" variant="outline">
               <PlusCircle className="w-4 h-4" />
-              Ajouter un patient pour ce jour
+              {t("addPatientForDay")}
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>Ajouter une transfusion - {format(selectedDate, "dd/MM/yyyy")}</DialogTitle>
+              <DialogTitle>{t("addTransfusion")} - {format(selectedDate, "dd/MM/yyyy")}</DialogTitle>
             </DialogHeader>
             
             <div className="grid gap-4 py-4">
               <div className="space-y-2">
-                <Label>Sélectionner un patient</Label>
+                <Label>{t("selectPatient")}</Label>
                 <div className="relative">
                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Rechercher un patient..."
+                    placeholder={t("searchPatients")}
                     className="pl-8"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -210,7 +212,7 @@ export default function CalendarHistoryPage() {
                 </div>
                 <Select value={selectedPatientId} onValueChange={setSelectedPatientId}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Choisir un patient" />
+                    <SelectValue placeholder={t("selectPatient")} />
                   </SelectTrigger>
                   <SelectContent>
                     {filteredPatients.map((p) => (
@@ -220,7 +222,7 @@ export default function CalendarHistoryPage() {
                     ))}
                     {filteredPatients.length === 0 && (
                       <div className="p-4 text-center text-sm text-muted-foreground">
-                        Aucun patient trouvé
+                        {t("patientFound")}
                       </div>
                     )}
                   </SelectContent>
@@ -229,7 +231,7 @@ export default function CalendarHistoryPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Priorité</Label>
+                  <Label>{t("priority")}</Label>
                   <Select 
                     value={formData.priority} 
                     onValueChange={(v) => setFormData({...formData, priority: v})}
@@ -238,8 +240,8 @@ export default function CalendarHistoryPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="normal">Normale</SelectItem>
-                      <SelectItem value="urgent">Urgente</SelectItem>
+                      <SelectItem value="normal">{t("regular")}</SelectItem>
+                      <SelectItem value="urgent">{t("urgent")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -255,7 +257,7 @@ export default function CalendarHistoryPage() {
 
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label>Poches</Label>
+                  <Label>{t("bags")}</Label>
                   <Input 
                     type="text" 
                     value={formData.poches} 
@@ -263,7 +265,7 @@ export default function CalendarHistoryPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>H.dist</Label>
+                  <Label>{t("hdist")}</Label>
                   <Input 
                     type="text" 
                     value={formData.Hdist} 
@@ -271,7 +273,7 @@ export default function CalendarHistoryPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>H.reçu</Label>
+                  <Label>{t("hreceived")}</Label>
                   <Input 
                     type="text" 
                     value={formData.Hrecu} 
@@ -287,7 +289,7 @@ export default function CalendarHistoryPage() {
                     checked={formData.hasF} 
                     onCheckedChange={(checked) => setFormData({...formData, hasF: !!checked})} 
                   />
-                  <Label htmlFor="hasF">F</Label>
+                  <Label htmlFor="hasF">{t("hasF")}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Checkbox 
@@ -295,7 +297,7 @@ export default function CalendarHistoryPage() {
                     checked={formData.hasC} 
                     onCheckedChange={(checked) => setFormData({...formData, hasC: !!checked})} 
                   />
-                  <Label htmlFor="hasC">C</Label>
+                  <Label htmlFor="hasC">{t("hasC")}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Checkbox 
@@ -303,12 +305,12 @@ export default function CalendarHistoryPage() {
                     checked={formData.hasL} 
                     onCheckedChange={(checked) => setFormData({...formData, hasL: !!checked})} 
                   />
-                  <Label htmlFor="hasL">L</Label>
+                  <Label htmlFor="hasL">{t("hasL")}</Label>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label>Description / Notes</Label>
+                <Label>{t("notes")}</Label>
                 <Textarea 
                   value={formData.description} 
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
@@ -317,14 +319,14 @@ export default function CalendarHistoryPage() {
             </div>
 
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsModalOpen(false)}>Annuler</Button>
+              <Button variant="outline" onClick={() => setIsModalOpen(false)}>{t("cancel")}</Button>
               <Button 
                 type="button"
                 onClick={handleAddHistory} 
                 disabled={!selectedPatientId || isSubmitting}
               >
                 {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Enregistrer
+                {t("save")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -334,15 +336,15 @@ export default function CalendarHistoryPage() {
       <div className="flex-1 space-y-4">
         <div className="no-print flex justify-between items-center">
           <h2 className="text-xl font-semibold">
-            Patients du {format(selectedDate, "yyyy-MM-dd")}
+            {t("patientsFrom")} {format(selectedDate, "yyyy-MM-dd")}
           </h2>
           <div className="flex justify-end mb-4 print:hidden">
             <PrintButton />
           </div>
         </div>
 
-        {loading && <p>Chargement...</p>}
-        {!loading && patients.length === 0 && <p>Aucune transfusion trouvée.</p>}
+        {loading && <p>{t("loading")}</p>}
+        {!loading && patients.length === 0 && <p>{t("noTransfusionFound")}</p>}
         {!loading && patients.length > 0 && (
           <div ref={tableRef} className="space-y-4">
             <div className="hidden print:block print-header alg">
@@ -369,20 +371,20 @@ export default function CalendarHistoryPage() {
               <Table>
                 <TableHeader className="bg-gray-50">
                   <TableRow>
-                    <TableHead className="font-semibold text-gray-900">H.dist</TableHead>
-                    <TableHead className="font-semibold text-gray-900">H.reçu</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("hdist")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("hreceived")}</TableHead>
                     <TableHead className="font-semibold text-gray-900">Patient</TableHead>
-                    <TableHead className="font-semibold text-gray-900">Groupe sanguin</TableHead>
-                    <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
-                    <TableHead className="font-semibold text-gray-900">F</TableHead>
-                    <TableHead className="font-semibold text-gray-900">C</TableHead>
-                    <TableHead className="font-semibold text-gray-900">L</TableHead>
-                    <TableHead className="font-semibold text-gray-900">Priorité</TableHead>
-                    <TableHead className="font-semibold text-gray-900">Poches</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("bloodType")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("phenotype")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("hasF")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("hasC")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("hasL")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("priority")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("bags")}</TableHead>
                     <TableHead className="font-semibold text-gray-900">Hb</TableHead>
                     <TableHead className="font-semibold text-gray-900">Don</TableHead>
-                    <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
-                    <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Présence</TableHead>
+                    <TableHead className="font-semibold text-gray-900 print:hidden">{t("actions")}</TableHead>
+                    <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Presence</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

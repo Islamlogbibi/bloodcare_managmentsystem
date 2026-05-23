@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation"
 import { toast } from "@/hooks/use-toast"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
+import { useLanguage } from "@/contexts/language-context"
 
 interface PatientFormProps {
   patient?: any
@@ -24,6 +25,7 @@ interface PatientFormProps {
 }
 
 export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
+  const { t } = useLanguage()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [admissionDate, setAdmissionDate] = useState<Date | undefined>(
@@ -41,8 +43,8 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
     const ph = formData.get("ph") as string
     if (!gender) {
       toast({
-        title: "Erreur de Validation",
-        description: "Veuillez sélectionner un sexe.",
+        title: t("validationError"),
+        description: t("selectGender"),
         variant: "destructive",
       })
       setIsLoading(false)
@@ -50,8 +52,8 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
     }
     if (!patientCategory) {
       toast({
-        title: "Erreur de Validation",
-        description: "Veuillez sélectionner une catégorie.",
+        title: t("validationError"),
+        description: t("selectCategory"),
         variant: "destructive",
       })
       setIsLoading(false)
@@ -59,8 +61,8 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
     }
     if (!bloodType) {
       toast({
-        title: "Erreur de Validation",
-        description: "Veuillez sélectionner un groupe sanguin.",
+        title: t("validationError"),
+        description: t("selectBloodType"),
         variant: "destructive",
       })
       setIsLoading(false)
@@ -68,8 +70,8 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
     }
     if (!ph) {
       toast({
-        title: "Erreur de Validation",
-        description: "Veuillez sélectionner un phénotype.",
+        title: t("validationError"),
+        description: t("selectPhenotype"),
         variant: "destructive",
       })
       setIsLoading(false)
@@ -135,15 +137,15 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center text-gray-900">
             <User className="mr-2 h-5 w-5 text-red-600" />
-            Informations Personnelles
+            {t("patientInformation")}
           </CardTitle>
-          <CardDescription>Détails personnels et identification du patient</CardDescription>
+          <CardDescription>{t("editPersonalInfo")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">
-                Prénom *
+                {t("firstName")} *
               </Label>
               <Input
                 id="firstName"
@@ -155,7 +157,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">
-                Nom de Famille *
+                {t("lastName")} *
               </Label>
               <Input
                 id="lastName"
@@ -170,7 +172,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="dateOfBirth" className="text-sm font-medium text-gray-700">
-                Date de Naissance
+                {t("dateOfBirth")}
               </Label>
               <Input
                 id="dateOfBirth"
@@ -182,15 +184,15 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="gender" className="text-sm font-medium text-gray-700">
-                Sexe *
+                {t("gender")} *
               </Label>
               <Select name="gender" defaultValue={patient?.gender}>
                 <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
-                  <SelectValue placeholder="Sélectionner le sexe" />
+                  <SelectValue placeholder={t("selectGender")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="male">Masculin</SelectItem>
-                  <SelectItem value="female">Féminin</SelectItem>
+                  <SelectItem value="male">{t("male")}</SelectItem>
+                  <SelectItem value="female">{t("female")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -203,15 +205,15 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center text-gray-900">
             <Phone className="mr-2 h-5 w-5 text-blue-600" />
-            Informations de Contact
+            {t("email")}
           </CardTitle>
-          <CardDescription>Téléphone, email et détails d'adresse</CardDescription>
+          <CardDescription>{t("phone")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
-                Numéro de Téléphone
+                {t("phone")}
               </Label>
               <Input
                 id="phone"
@@ -223,7 +225,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                Adresse Email
+                {t("email")}
               </Label>
               <Input
                 id="email"
@@ -237,7 +239,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
 
           <div className="space-y-2">
             <Label htmlFor="address" className="text-sm font-medium text-gray-700">
-              Adresse
+              {t("address")}
             </Label>
             <Textarea
               id="address"

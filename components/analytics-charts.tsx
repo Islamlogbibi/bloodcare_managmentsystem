@@ -4,9 +4,70 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts"
 import type { DateRange } from "react-day-picker"
+import { useLanguage } from "@/contexts/language-context"
 
 interface AnalyticsChartsProps {
   dateRange: DateRange | undefined
+}
+
+const chartLabels = {
+  en: {
+    transfusionsAndBags: "Transfusions and Blood Bags",
+    transfusionsScheduledVsCompleted: "Scheduled transfusions vs completed with number of bags",
+    bloodGroupsAndHemoglobin: "Blood Groups and Hemoglobin",
+    hemoglobinDistribution: "Distribution with average hemoglobin level",
+    prioritiesAndBags: "Priorities and Blood Bags",
+    distributionByPriority: "Distribution by priority with number of bags",
+    monthlyTrends: "Monthly Trends",
+    transfusionByMonth: "Transfusions by month with progress",
+    scheduled: "Scheduled",
+    completed: "Completed",
+    bags: "Bags",
+    patients: "Patients",
+    totalBags: "Total Bags",
+    avgHb: "Avg Hb (g/dL)",
+    cases: "Cases",
+    bloodBags: "Blood Bags",
+    data: "Data",
+  },
+  fr: {
+    transfusionsAndBags: "Transfusions et Poches Sanguines",
+    transfusionsScheduledVsCompleted: "Transfusions programmées vs complétées avec nombre de poches",
+    bloodGroupsAndHemoglobin: "Groupes Sanguins et Hémoglobine",
+    hemoglobinDistribution: "Distribution avec taux d'hémoglobine moyen",
+    prioritiesAndBags: "Priorités et Poches Sanguines",
+    distributionByPriority: "Distribution par priorité avec nombre de poches",
+    monthlyTrends: "Tendances Mensuelles",
+    transfusionByMonth: "Transfusions par mois avec progression",
+    scheduled: "Programmées",
+    completed: "Complétées",
+    bags: "Poches",
+    patients: "Patients",
+    totalBags: "Poches totales",
+    avgHb: "Hb moyen (g/dL)",
+    cases: "Cas",
+    bloodBags: "Poches sanguines",
+    data: "Données",
+  },
+  ar: {
+    transfusionsAndBags: "عمليات النقل والأكياس",
+    transfusionsScheduledVsCompleted: "عمليات النقل المجدولة مقابل المكتملة مع عدد الأكياس",
+    bloodGroupsAndHemoglobin: "فصائل الدم والهيموجلوبين",
+    hemoglobinDistribution: "التوزيع مع متوسط مستوى الهيموجلوبين",
+    prioritiesAndBags: "الأولويات والأكياس",
+    distributionByPriority: "التوزيع حسب الأولوية مع عدد الأكياس",
+    monthlyTrends: "الاتجاهات الشهرية",
+    transfusionByMonth: "عمليات النقل حسب الشهر مع التقدم",
+    scheduled: "مجدولة",
+    completed: "مكتملة",
+    bags: "أكياس",
+    patients: "مرضى",
+    totalBags: "إجمالي الأكياس",
+    avgHb: "متوسط Hb (g/dL)",
+    cases: "حالات",
+    bloodBags: "أكياس الدم",
+    data: "البيانات",
+  },
 }
 
 interface ChartData {
@@ -75,6 +136,9 @@ const getFallbackData = (): ChartData => {
 }
 
 export function AnalyticsCharts({ dateRange }: AnalyticsChartsProps) {
+  const { language } = useLanguage()
+  const labels = chartLabels[language as keyof typeof chartLabels]
+  
   const [chartData, setChartData] = useState<ChartData>(getFallbackData())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -163,8 +227,8 @@ export function AnalyticsCharts({ dateRange }: AnalyticsChartsProps) {
       <div className="grid gap-6 md:grid-cols-2">
         <Card className="border-0 shadow-md">
           <CardHeader>
-            <CardTitle className="text-gray-900">Transfusions et Poches Sanguines</CardTitle>
-            <CardDescription>Transfusions programmées vs complétées avec nombre de poches</CardDescription>
+            <CardTitle className="text-gray-900">{labels.transfusionsAndBags}</CardTitle>
+            <CardDescription>{labels.transfusionsScheduledVsCompleted}</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -175,7 +239,7 @@ export function AnalyticsCharts({ dateRange }: AnalyticsChartsProps) {
                 <Tooltip
                   formatter={(value, name) => [
                     value,
-                    name === "bloodUnits" ? "Poches sanguines" : name === "transfusions" ? "Programmées" : "Complétées",
+                    name === "bloodUnits" ? labels.bloodBags : name === "transfusions" ? labels.scheduled : labels.completed,
                   ]}
                 />
                 <Bar dataKey="transfusions" fill="#3b82f6" name="transfusions" />
@@ -188,8 +252,8 @@ export function AnalyticsCharts({ dateRange }: AnalyticsChartsProps) {
 
         <Card className="border-0 shadow-md">
           <CardHeader>
-            <CardTitle className="text-gray-900">Groupes Sanguins et Hémoglobine</CardTitle>
-            <CardDescription>Distribution avec taux d'hémoglobine moyen</CardDescription>
+            <CardTitle className="text-gray-900">{labels.bloodGroupsAndHemoglobin}</CardTitle>
+            <CardDescription>{labels.hemoglobinDistribution}</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -200,7 +264,7 @@ export function AnalyticsCharts({ dateRange }: AnalyticsChartsProps) {
                 <Tooltip
                   formatter={(value, name) => [
                     value,
-                    name === "count" ? "Patients" : name === "totalBloodUnits" ? "Poches totales" : "Hb moyen (g/dL)",
+                    name === "count" ? labels.patients : name === "totalBloodUnits" ? labels.totalBags : labels.avgHb,
                   ]}
                 />
                 <Bar dataKey="count" fill="#3b82f6" name="count" />
@@ -213,19 +277,19 @@ export function AnalyticsCharts({ dateRange }: AnalyticsChartsProps) {
 
         <Card className="border-0 shadow-md">
           <CardHeader>
-            <CardTitle className="text-gray-900">Priorités et Poches Sanguines</CardTitle>
-            <CardDescription>Distribution par priorité avec nombre de poches</CardDescription>
+            <CardTitle className="text-gray-900">{labels.prioritiesAndBags}</CardTitle>
+            <CardDescription>{labels.distributionByPriority}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="mb-2 text-xs text-gray-500">
-              Données: {chartData.priorityDistribution?.length || 0} priorités
+              {labels.data}: {chartData.priorityDistribution?.length || 0}
             </div>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData.priorityDistribution}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="priority" />
                 <YAxis />
-                <Tooltip formatter={(value, name) => [value, name === "count" ? "Cas" : "Poches sanguines"]} />
+                <Tooltip formatter={(value, name) => [value, name === "count" ? labels.cases : labels.bloodBags]} />
                 <Bar dataKey="count" fill="#ef4444" name="count" />
                 <Bar dataKey="bloodUnits" fill="#3b82f6" name="bloodUnits" />
               </BarChart>

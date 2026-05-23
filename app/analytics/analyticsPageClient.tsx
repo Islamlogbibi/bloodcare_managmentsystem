@@ -10,8 +10,45 @@ import { DatePickerWithRange } from "@/components/date-range-picker";
 import type { DateRange } from "react-day-picker";
 import { subDays } from "date-fns";
 import { RefreshCw, TrendingUp, BarChart3 } from "lucide-react";
+import { useLanguage } from "@/contexts/language-context";
+
+const analyticsTitles = {
+  en: {
+    title: "Analytics Dashboard",
+    description: "Detailed analysis of transfusions and trends",
+    period: "Analysis Period",
+    selectPeriod: "Select a period to see analytics",
+    days7: "7 days",
+    days30: "30 days",
+    days90: "90 days",
+    refresh: "Refresh",
+  },
+  fr: {
+    title: "Tableau d'analyses",
+    description: "Analyses détaillées des transfusions et tendances",
+    period: "Période d'analyse",
+    selectPeriod: "Sélectionnez une période pour voir les analyses",
+    days7: "7 jours",
+    days30: "30 jours",
+    days90: "90 jours",
+    refresh: "Actualiser",
+  },
+  ar: {
+    title: "لوحة التحليلات",
+    description: "تحليل مفصل لعمليات النقل والاتجاهات",
+    period: "فترة التحليل",
+    selectPeriod: "اختر فترة لعرض التحليلات",
+    days7: "7 أيام",
+    days30: "30 يوم",
+    days90: "90 يوم",
+    refresh: "تحديث",
+  },
+}
 
 export default function AnalyticsPageClient() {
+  const { language } = useLanguage()
+  const content = analyticsTitles[language as keyof typeof analyticsTitles]
+  
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: subDays(new Date(), 30),
     to: new Date(),
@@ -34,28 +71,28 @@ export default function AnalyticsPageClient() {
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 flex items-center">
               <BarChart3 className="mr-3 h-8 w-8 text-blue-600" />
-              Tableau d'analyses
+              {content.title}
             </h1>
-            <p className="text-gray-600 mt-1">Analyses détaillées des transfusions et tendances</p>
+            <p className="text-gray-600 mt-1">{content.description}</p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
             <DatePickerWithRange date={dateRange} setDate={setDateRange} />
             <div className="flex space-x-2">
               <Button variant="outline" size="sm" onClick={() => handleQuickSelect(7)} className="text-xs">
-                7 jours
+                {content.days7}
               </Button>
               <Button variant="outline" size="sm" onClick={() => handleQuickSelect(30)} className="text-xs">
-                30 jours
+                {content.days30}
               </Button>
               <Button variant="outline" size="sm" onClick={() => handleQuickSelect(90)} className="text-xs">
-                90 jours
+                {content.days90}
               </Button>
             </div>
             <div className="flex space-x-2">
               <Button variant="outline" size="sm" onClick={handleRefresh} className="flex items-center bg-transparent">
                 <RefreshCw className="mr-2 h-4 w-4" />
-                Actualiser
+                {content.refresh}
               </Button>
               <AnalyticsPageActions />
             </div>
@@ -67,16 +104,18 @@ export default function AnalyticsPageClient() {
           <CardHeader>
             <CardTitle className="text-gray-900 flex items-center">
               <TrendingUp className="mr-2 h-5 w-5 text-blue-600" />
-              Période d'analyse
+              {content.period}
             </CardTitle>
             <CardDescription>
               {dateRange?.from && dateRange?.to ? (
                 <>
-                  Du {dateRange.from.toLocaleDateString("fr-FR")} au {dateRange.to.toLocaleDateString("fr-FR")} (
-                  {Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24))} jours)
+                  {language === "en" && `From ${dateRange.from.toLocaleDateString("en-US")} to ${dateRange.to.toLocaleDateString("en-US")} `}
+                  {language === "fr" && `Du ${dateRange.from.toLocaleDateString("fr-FR")} au ${dateRange.to.toLocaleDateString("fr-FR")} `}
+                  {language === "ar" && `من ${dateRange.from.toLocaleDateString("ar-SA")} إلى ${dateRange.to.toLocaleDateString("ar-SA")} `}
+                  ({Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24))} {language === "en" ? "days" : language === "fr" ? "jours" : "أيام"})
                 </>
               ) : (
-                "Sélectionnez une période pour voir les analyses"
+                content.selectPeriod
               )}
             </CardDescription>
           </CardHeader>

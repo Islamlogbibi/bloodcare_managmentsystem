@@ -172,9 +172,9 @@ export default function CalendarHistoryPage() {
     }
   }
 
-  const filteredPatients = allPatients.filter(p => 
+  const filteredPatients = Array.isArray(allPatients) ? allPatients.filter(p => 
     `${p.firstName} ${p.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  ) : []
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 p-6">

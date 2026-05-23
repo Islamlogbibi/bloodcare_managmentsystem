@@ -23,7 +23,7 @@ export const createPatientSchema = z.object({
   hemoglobinLevel: z.number().min(5).max(20).optional(),
   medicalHistory: z.string().max(1000).optional(),
   admissionDate: z.string().optional(),
-  lastDonationDate: z.string().optional(),
+  lastTransfusionDate: z.string().optional(),
   // New fields
   hasF: z.boolean().optional().default(false),
   hasC: z.boolean().optional().default(false),

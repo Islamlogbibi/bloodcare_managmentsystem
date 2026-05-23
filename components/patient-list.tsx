@@ -98,11 +98,11 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
     if (sortConfig !== null) {
       sortablePatients.sort((a, b) => {
         if (sortConfig.key === "daysElapsed") {
-          const aLastDonationDate = a.lastDonationDate ? new Date(a.lastDonationDate) : null
-          const bLastDonationDate = b.lastDonationDate ? new Date(b.lastDonationDate) : null
+          const aLastTransfusionDate = a.lastTransfusionDate ? new Date(a.lastTransfusionDate) : null
+          const bLastTransfusionDate = b.lastTransfusionDate ? new Date(b.lastTransfusionDate) : null
 
-          const aDaysElapsed = aLastDonationDate ? differenceInDays(new Date(), aLastDonationDate) : -1
-          const bDaysElapsed = bLastDonationDate ? differenceInDays(new Date(), bLastDonationDate) : -1
+          const aDaysElapsed = aLastTransfusionDate ? differenceInDays(new Date(), aLastTransfusionDate) : -1
+          const bDaysElapsed = bLastTransfusionDate ? differenceInDays(new Date(), bLastTransfusionDate) : -1
 
           if (aDaysElapsed < bDaysElapsed) {
             return sortConfig.direction === "asc" ? -1 : 1
@@ -237,10 +237,10 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
           </TableHeader>
           <TableBody>
             {sortedPatients.map((patient) => {
-              const lastDonationDate = patient.lastDonationDate ? new Date(patient.lastDonationDate) : null
+              const lastTransfusionDate = patient.lastTransfusionDate ? new Date(patient.lastTransfusionDate) : null
 
               // Calculate days elapsed
-              const daysElapsed = lastDonationDate ? differenceInDays(new Date(), lastDonationDate) : null
+              const daysElapsed = lastTransfusionDate ? differenceInDays(new Date(), lastTransfusionDate) : null
 
               // Get color class for days elapsed
               const daysElapsedColorClass = getDaysElapsedColor(daysElapsed, patient.patientCategory)
@@ -285,7 +285,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
                     )}
                   </TableCell>
                   <TableCell>
-                    {patient.lastDonationDate ? format(patient.lastDonationDate, "dd MMM yyyy", { locale: fr }) : "N/D"}
+                    {patient.lastTransfusionDate ? format(patient.lastTransfusionDate, "dd MMM yyyy", { locale: fr }) : "N/D"}
                   </TableCell>
 
                   <TableCell>

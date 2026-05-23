@@ -35,7 +35,7 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
   const handleSchedule = async (priority: "regular" | "urgent") => {
     setIsScheduling(true)
 
-    console.log("Planification de transfusion pour:", patient.lastDonationDate)
+    console.log("Planification de transfusion pour:", patient.lastTransfusionDate)
 
     try {
       const today = new Date()

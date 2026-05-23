@@ -31,8 +31,8 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
   const [admissionDate, setAdmissionDate] = useState<Date | undefined>(
     patient?.admissionDate ? new Date(patient.admissionDate) : undefined,
   )
-  const [lastDonationDate, setLastDonationDate] = useState<Date | undefined>(
-    patient?.lastDonationDate ? new Date(patient.lastDonationDate) : undefined,
+  const [lastTransfusionDate, setLastTransfusionDate] = useState<Date | undefined>(
+    patient?.lastTransfusionDate ? new Date(patient.lastTransfusionDate) : undefined,
   )
 
   async function onSubmit(formData: FormData) {
@@ -92,7 +92,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         emergencyPhone: formData.get("emergencyPhone") as string,
         medicalHistory: formData.get("medicalHistory") as string,
         admissionDate: admissionDate?.toISOString(),
-        lastDonationDate: lastDonationDate?.toISOString(),
+        lastTransfusionDate: lastTransfusionDate?.toISOString(),
         weight: Number.parseFloat(formData.get("weight") as string),
         height: Number.parseFloat(formData.get("height") as string),
         hemoglobinLevel: Number.parseFloat(formData.get("hemoglobinLevel") as string),
@@ -107,22 +107,22 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
       if (isEditing && patient) {
         await updatePatient(patient._id, patientData)
         toast({
-          title: "Patient Mis à Jour",
-          description: "Les informations du patient ont été mises à jour avec succès.",
+          title: t("patientUpdated"),
+          description: t("patientUpdatedMessage"),
         })
       } else {
         await createPatient(patientData)
         toast({
-          title: "Patient Enregistré",
-          description: "Le nouveau patient a été enregistré avec succès.",
+          title: t("patientAdded"),
+          description: t("patientAddedMessage"),
         })
       }
 
       router.push("/patients")
     } catch (error) {
       toast({
-        title: "Erreur",
-        description: "Une erreur s'est produite. Veuillez réessayer.",
+        title: t("error"),
+        description: t("failedToSavePatient"),
         variant: "destructive",
       })
     } finally {
@@ -205,9 +205,9 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center text-gray-900">
             <Phone className="mr-2 h-5 w-5 text-blue-600" />
-            {t("email")}
+            {t("contactInformation")}
           </CardTitle>
-          <CardDescription>{t("phone")}</CardDescription>
+          <CardDescription>{t("contactDetailsDescription")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -253,7 +253,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="emergencyContact" className="text-sm font-medium text-gray-700">
-                Nom du Contact d'Urgence
+                {t("emergencyContact")}
               </Label>
               <Input
                 id="emergencyContact"
@@ -264,7 +264,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="emergencyPhone" className="text-sm font-medium text-gray-700">
-                Téléphone du Contact d'Urgence
+                {t("emergencyPhone")}
               </Label>
               <Input
                 id="emergencyPhone"
@@ -283,39 +283,39 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center text-gray-900">
             <Heart className="mr-2 h-5 w-5 text-red-600" />
-            Informations Médicales
+            {t("medicalInformation")}
           </CardTitle>
-          <CardDescription>Groupe sanguin et détails médicaux</CardDescription>
+          <CardDescription>{t("medicalDetailsDescription")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="bloodType" className="text-sm font-medium text-gray-700">
-                Groupe Sanguin *
+                {t("bloodType")} *
               </Label>
               <Select name="bloodType" defaultValue={patient?.bloodType}>
                 <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
-                  <SelectValue placeholder="Sélectionner le groupe sanguin" />
+                  <SelectValue placeholder={t("selectBloodType")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="A+">A+ Positif</SelectItem>
-                  <SelectItem value="A-">A- Négatif</SelectItem>
-                  <SelectItem value="B+">B+ Positif</SelectItem>
-                  <SelectItem value="B-">B- Négatif</SelectItem>
-                  <SelectItem value="AB+">AB+ Positif</SelectItem>
-                  <SelectItem value="AB-">AB- Négatif</SelectItem>
-                  <SelectItem value="O+">O+ Positif</SelectItem>
-                  <SelectItem value="O-">O- Négatif</SelectItem>
+                  <SelectItem value="A+">A+ {t("positive")}</SelectItem>
+                  <SelectItem value="A-">A- {t("negative")}</SelectItem>
+                  <SelectItem value="B+">B+ {t("positive")}</SelectItem>
+                  <SelectItem value="B-">B- {t("negative")}</SelectItem>
+                  <SelectItem value="AB+">AB+ {t("positive")}</SelectItem>
+                  <SelectItem value="AB-">AB- {t("negative")}</SelectItem>
+                  <SelectItem value="O+">O+ {t("positive")}</SelectItem>
+                  <SelectItem value="O-">O- {t("negative")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="ph" className="text-sm font-medium text-gray-700">
-                Phénotypes *
+                {t("phenotype")} *
               </Label>
               <Select name="ph" defaultValue={patient?.ph}>
                 <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
-                  <SelectValue placeholder="Sélectionner le Phénotype" />
+                  <SelectValue placeholder={t("selectPhenotype")} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="cceek+">cc ee KEL (+)</SelectItem>
@@ -341,7 +341,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="weight" className="text-sm font-medium text-gray-700">
-                Poids (kg)
+                {t("weight")}
               </Label>
               <Input
                 id="weight"
@@ -354,7 +354,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="height" className="text-sm font-medium text-gray-700">
-                Taille (cm)
+                {t("height")}
               </Label>
               <Input
                 id="height"
@@ -369,7 +369,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
 
           <div className="space-y-2">
             <Label htmlFor="hemoglobinLevel" className="text-sm font-medium text-gray-700">
-              Taux d'Hémoglobine (g/dL)
+              {t("hemoglobinLevel")}
             </Label>
             <Input
               id="hemoglobinLevel"
@@ -383,7 +383,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">Date d'Admission</Label>
+              <Label className="text-sm font-medium text-gray-700">{t("admissionDate")}</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -394,7 +394,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {admissionDate ? format(admissionDate, "PPP", { locale: fr }) : "Sélectionner la date d'admission"}
+                    {admissionDate ? format(admissionDate, "PPP", { locale: fr }) : t("selectAdmissionDate")}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -403,24 +403,24 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
               </Popover>
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">Dernière Date de Don</Label>
+              <Label className="text-sm font-medium text-gray-700">{t("lastTransfusionDate")}</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     className={cn(
                       "w-full justify-start text-left font-normal border-gray-300 hover:bg-gray-50",
-                      !lastDonationDate && "text-muted-foreground",
+                      !lastTransfusionDate && "text-muted-foreground",
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {lastDonationDate
-                      ? format(lastDonationDate, "PPP", { locale: fr })
-                      : "Sélectionner la dernière date de don"}
+                    {lastTransfusionDate
+                      ? format(lastTransfusionDate, "PPP", { locale: fr })
+                      : t("selectLastTransfusionDate")}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
-                  <Calendar mode="single" selected={lastDonationDate} onSelect={setLastDonationDate} initialFocus />
+                  <Calendar mode="single" selected={lastTransfusionDate} onSelect={setLastTransfusionDate} initialFocus />
                 </PopoverContent>
               </Popover>
             </div>
@@ -428,7 +428,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
 
           {/* New F, C, L checkboxes */}
           <div className="space-y-4">
-            <Label className="text-sm font-medium text-gray-700">Attributs du Patient</Label>
+            <Label className="text-sm font-medium text-gray-700">{t("patientAttributes")}</Label>
             <div className="grid grid-cols-3 gap-4">
               <div className="flex items-center space-x-2">
                 <Checkbox id="hasF" name="hasF" defaultChecked={patient?.hasF} />
@@ -454,13 +454,13 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
           {/* Patient Category */}
           <div className="space-y-2">
             <Label htmlFor="patientCategory" className="text-sm font-medium text-gray-700">
-              Catégorie de Patient *
+              {t("patientCategory")} *
             </Label>
             {/* Hidden input for native form validation */}
             <input type="text" name="patientCategory" value={patient?.patientCategory || ""} required readOnly hidden />
             <Select
               name="patientCategory"
-              defaultValue={patient?.patientCategory || "Tous les Patients"}
+              defaultValue={patient?.patientCategory}
               onValueChange={(value) => {
                 // Update the hidden input when select changes
                 const hiddenInput = document.querySelector<HTMLInputElement>('input[name="patientCategory"]')
@@ -468,14 +468,14 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
               }}
             >
               <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
-                <SelectValue placeholder="Sélectionner la catégorie" />
+                <SelectValue placeholder={t("selectPatientCategory")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="HyperRegime">HyperRégime</SelectItem>
-                <SelectItem value="PolyTransfuses">PolyTransfusés</SelectItem>
-                <SelectItem value="Echanges">Échanges</SelectItem>
-                <SelectItem value="PDV">PDV</SelectItem>
-                <SelectItem value="Echanges Occasionnels">Échanges Occasionnels</SelectItem>
+                <SelectItem value="HyperRegime">{t("hyperRegime")}</SelectItem>
+                <SelectItem value="PolyTransfuses">{t("polyTransfused")}</SelectItem>
+                <SelectItem value="Echanges">{t("exchanges")}</SelectItem>
+                <SelectItem value="PDV">{t("pdv")}</SelectItem>
+                <SelectItem value="Echanges Occasionnels">{t("occasionalExchanges")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -483,27 +483,27 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="pathologie" className="text-sm font-medium text-gray-700">
-                Pathologie
+                {t("pathology")}
               </Label>
               <Textarea
                 id="pathologie"
                 name="pathologie"
                 defaultValue={patient?.pathologie}
                 rows={3}
-                placeholder="Saisir la pathologie du patient..."
+                placeholder={t("pathologyPlaceholder")}
                 className="border-gray-300 focus:border-red-500 focus:ring-red-500"
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="alloImmunisationStatus" className="text-sm font-medium text-gray-700">
-                Statut d'Allo-immunisation
+                {t("alloImmunisationStatus")}
               </Label>
               <Textarea
                 id="alloImmunisationStatus"
                 name="alloImmunisationStatus"
                 defaultValue={patient?.alloImmunisationStatus}
                 rows={3}
-                placeholder="Saisir le statut d'allo-immunisation..."
+                placeholder={t("alloImmunisationStatusPlaceholder")}
                 className="border-gray-300 focus:border-red-500 focus:ring-red-500"
               />
             </div>
@@ -511,14 +511,14 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
 
           <div className="space-y-2">
             <Label htmlFor="medicalHistory" className="text-sm font-medium text-gray-700">
-              Antécédents Médicaux et Notes
+              {t("medicalHistoryAndNotes")}
             </Label>
             <Textarea
               id="medicalHistory"
               name="medicalHistory"
               defaultValue={patient?.medicalHistory}
               rows={4}
-              placeholder="Saisir les antécédents médicaux pertinents, allergies, médicaments ou notes spéciales..."
+              placeholder={t("medicalHistoryPlaceholder")}
               className="border-gray-300 focus:border-red-500 focus:ring-red-500"
             />
           </div>
@@ -527,11 +527,11 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
 
       <div className="flex justify-end space-x-4 pt-6">
         <Button type="button" variant="outline" onClick={() => router.back()} className="border-gray-300">
-          Annuler
+          {t("cancel")}
         </Button>
         <Button type="submit" disabled={isLoading} className="bg-red-600 hover:bg-red-700">
           <Save className="mr-2 h-4 w-4" />
-          {isLoading ? "Enregistrement..." : isEditing ? "Mettre à Jour le Patient" : "Enregistrer le Patient"}
+          {isLoading ? t("saving") : isEditing ? t("updatePatient") : t("savePatient")}
         </Button>
       </div>
     </form>

@@ -88,6 +88,137 @@ export default function PatientViewClient({ patient }: PatientViewClientProps) {
               </div>
             </CardContent>
           </Card>
+
+          {/* Contact Information */}
+          <Card className="border-0 shadow-md">
+            <CardHeader>
+              <CardTitle className="flex items-center text-gray-900">
+                <Phone className="mr-2 h-5 w-5 text-green-600" />
+                {t("contactInformation")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <p className="text-sm font-medium text-gray-500">{t("phoneNumber")}</p>
+                <div className="flex items-center space-x-2">
+                  <Phone className="h-4 w-4 text-gray-400" />
+                  <p className="text-gray-900">{patient.phone || t("notAvailable")}</p>
+                </div>
+              </div>
+              {patient.email && (
+                <div>
+                  <p className="text-sm font-medium text-gray-500">{t("email")}</p>
+                  <div className="flex items-center space-x-2">
+                    <Mail className="h-4 w-4 text-gray-400" />
+                    <p className="text-gray-900">{patient.email}</p>
+                  </div>
+                </div>
+              )}
+              <div>
+                <p className="text-sm font-medium text-gray-500">{t("address")}</p>
+                <p className="text-gray-900">{patient.address || t("notProvided")}</p>
+              </div>
+              {patient.emergencyContact && (
+                <div>
+                  <p className="text-sm font-medium text-gray-500">{t("emergencyContact")}</p>
+                  <p className="text-gray-900">{patient.emergencyContact}</p>
+                  <p className="text-sm text-gray-600">{patient.emergencyPhone || t("notAvailable")}</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Medical Information */}
+          <Card className="border-0 shadow-md">
+            <CardHeader>
+              <CardTitle className="flex items-center text-gray-900">
+                <Heart className="mr-2 h-5 w-5 text-red-600" />
+                {t("medicalInformation")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <p className="text-sm font-medium text-gray-500">{t("bloodType")}</p>
+                  <Badge className="bg-red-100 text-red-800 font-semibold">{patient.bloodType || t("notAvailable")}</Badge>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">{t("ph")}</p>
+                  <Badge className="bg-red-100 text-red-800 font-semibold">{patient.ph || t("notAvailable")}</Badge>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <p className="text-sm font-medium text-gray-500">{t("weight")}</p>
+                  <p className="text-gray-900">{patient.weight ? `${patient.weight} kg` : t("notAvailable")}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">{t("height")}</p>
+                  <p className="text-gray-900">{patient.height ? `${patient.height} cm` : t("notAvailable")}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">{t("hemoglobinLevel")}</p>
+                  <p className="text-gray-900">{patient.hemoglobinLevel ? `${patient.hemoglobinLevel} g/dL` : t("notAvailable")}</p>
+                </div>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500">{t("medicalHistory")}</p>
+                <p className="text-gray-900 text-sm">{patient.medicalHistory || t("noMedicalHistory")}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Additional Medical Information - Not printed */}
+          <Card className="border-0 shadow-md print:hidden">
+            <CardHeader>
+              <CardTitle className="flex items-center text-gray-900">
+                <Heart className="mr-2 h-5 w-5 text-orange-600" />
+                {t("additionalMedicalInformation")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <p className="text-sm font-medium text-gray-500">{t("pathology")}</p>
+                <p className="text-gray-900 text-sm">{patient.pathologie || t("notProvided")}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500">{t("alloImmunisationStatus")}</p>
+                <p className="text-gray-900 text-sm">{patient.alloImmunisationStatus || t("notProvided")}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Transfusion History */}
+          <Card className="border-0 shadow-md">
+            <CardHeader>
+              <CardTitle className="flex items-center text-gray-900">
+                <Clock className="mr-2 h-5 w-5 text-purple-600" />
+                {t("transfusionHistory")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <p className="text-sm font-medium text-gray-500">{t("admissionDate")}</p>
+                <p className="text-gray-900">
+                  {patient.admissionDate ? format(new Date(patient.admissionDate), "dd MMM yyyy") : t("notAvailable")}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500">{t("lastTransfusionDate")}</p>
+                <p className="text-gray-900">
+                  {patient.lastTransfusionDate
+                    ? format(new Date(patient.lastTransfusionDate), "dd MMM yyyy")
+                    : t("neverTransfused")}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500">{t("status")}</p>
+                <Badge variant="outline" className="border-green-200 text-green-700">
+                  {t("patientActive")}
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

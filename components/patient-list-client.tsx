@@ -37,12 +37,12 @@ export function PatientListClient({ patients }: PatientListClientProps) {
           </TableHeader>
           <TableBody>
             {patients.map((patient) => {
-              // Calculate next transfusion date (90 days after last donation)
-              const lastDonationDate = patient.lastDonationDate ? new Date(patient.lastDonationDate) : null
-              const nextTransfusionDate = lastDonationDate ? addDays(lastDonationDate, 90) : null
+              // Calculate next transfusion date (90 days after last transfusion)
+              const lastTransfusionDate = patient.lastTransfusionDate ? new Date(patient.lastTransfusionDate) : null
+              const nextTransfusionDate = lastTransfusionDate ? addDays(lastTransfusionDate, 90) : null
 
               // Calculate days elapsed
-              const daysElapsed = lastDonationDate ? differenceInDays(new Date(), lastDonationDate) : null
+              const daysElapsed = lastTransfusionDate ? differenceInDays(new Date(), lastTransfusionDate) : null
 
               // Extract blood group and type
               const bloodGroup = patient.bloodType ? patient.bloodType.charAt(0) : ""
@@ -87,7 +87,7 @@ export function PatientListClient({ patients }: PatientListClientProps) {
                     )}
                   </TableCell>
                   <TableCell>
-                    {lastDonationDate ? format(lastDonationDate, "dd MMM yyyy", { locale: fr }) : "N/D"}
+                    {lastTransfusionDate ? format(lastTransfusionDate, "dd MMM yyyy", { locale: fr }) : "N/D"}
                   </TableCell>
                   <TableCell>
                     {nextTransfusionDate ? format(nextTransfusionDate, "dd MMM yyyy", { locale: fr }) : "N/D"}

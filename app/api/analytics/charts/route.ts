@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { MongoClient } from "mongodb"
 
 const client = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017")
-const dbName = "blood_donation_system"
+const dbName = "blood_transfusion_system"
 
 async function connectToDatabase() {
   try {

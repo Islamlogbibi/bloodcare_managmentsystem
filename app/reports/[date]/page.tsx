@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, User } from "lucide-react"
 
 const client = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017")
-const dbName = "blood_donation_system"
+const dbName = "blood_transfusion_system"
 
 async function getDailyHistory() {
   try {

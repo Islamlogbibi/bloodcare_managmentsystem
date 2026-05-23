@@ -76,8 +76,8 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
   const [admissionDate, setAdmissionDate] = useState<Date | undefined>(
     patient?.admissionDate ? new Date(patient.admissionDate) : undefined,
   )
-  const [lastDonationDate, setLastDonationDate] = useState<Date | undefined>(
-    patient?.lastDonationDate ? new Date(patient.lastDonationDate) : undefined,
+  const [lastTransfusionDate, setLastTransfusionDate] = useState<Date | undefined>(
+    patient?.lastTransfusionDate ? new Date(patient.lastTransfusionDate) : undefined,
   )
 
   const validateField = (name: string, value: any) => {
@@ -119,7 +119,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
         emergencyPhone: formData.get("emergencyPhone") as string,
         medicalHistory: formData.get("medicalHistory") as string,
         admissionDate: admissionDate?.toISOString(),
-        lastDonationDate: lastDonationDate?.toISOString(),
+        lastTransfusionDate: lastTransfusionDate?.toISOString(),
         weight: formData.get("weight") ? Number.parseFloat(formData.get("weight") as string) : undefined,
         height: formData.get("height") ? Number.parseFloat(formData.get("height") as string) : undefined,
         hemoglobinLevel: formData.get("hemoglobinLevel")
@@ -501,27 +501,27 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
                 </PopoverContent>
               </Popover>
             </FormField>
-            <FormField label="Date du dernier don" name="lastDonationDate">
+            <FormField label="Date de la dernière transfusion" name="lastTransfusionDate">
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     className={cn(
                       "w-full justify-start text-left font-normal border-gray-300 hover:bg-gray-50 focus-ring",
-                      !lastDonationDate && "text-muted-foreground",
+                      !lastTransfusionDate && "text-muted-foreground",
                     )}
                     aria-label={
-                      lastDonationDate
-                        ? `Date du dernier don: ${format(lastDonationDate, "PPP")}`
-                        : "Sélectionner la date du dernier don"
+                      lastTransfusionDate
+                        ? `Date de la dernière transfusion: ${format(lastTransfusionDate, "PPP")}`
+                        : "Sélectionner la date de la dernière transfusion"
                     }
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {lastDonationDate ? format(lastDonationDate, "PPP") : "Sélectionner la date du dernier don"}
+                    {lastTransfusionDate ? format(lastTransfusionDate, "PPP") : "Sélectionner la date de la dernière transfusion"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
-                  <Calendar mode="single" selected={lastDonationDate} onSelect={setLastDonationDate} initialFocus />
+                  <Calendar mode="single" selected={lastTransfusionDate} onSelect={setLastTransfusionDate} initialFocus />
                 </PopoverContent>
               </Popover>
             </FormField>

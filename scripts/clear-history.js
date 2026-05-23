@@ -7,7 +7,7 @@ const client = new MongoClient(uri)
 async function clearHistory() {
   try {
     await client.connect()
-    const db = client.db("blood_donation_system")
+    const db = client.db("blood_transfusion_system")
     const result = await db.collection("patients").updateMany({}, { $set: { schedules: [] } })
     console.log(result)
   } finally {

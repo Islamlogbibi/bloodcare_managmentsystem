@@ -17,12 +17,12 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "BloodCare - Blood Donation Management System",
+    default: "BloodCare - Blood Transfusion Management System",
     template: "%s | BloodCare",
   },
   description:
-    "Professional patient blood donation management application for healthcare providers. Manage patient records, schedule transfusions, and track blood donation data efficiently.",
-  keywords: ["blood donation", "healthcare", "patient management", "transfusion", "medical records"],
+    "Professional patient blood transfusion management application for healthcare providers. Manage patient records, schedule transfusions, and track blood transfusion data efficiently.",
+  keywords: ["blood transfusion", "healthcare", "patient management", "transfusion", "medical records"],
   authors: [{ name: "BloodCare Team" }],
   creator: "BloodCare",
   publisher: "BloodCare",
@@ -36,14 +36,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://bloodcare.app",
-    title: "BloodCare - Blood Donation Management System",
-    description: "Professional patient blood donation management application for healthcare providers.",
+    title: "BloodCare - Blood Transfusion Management System",
+    description: "Professional patient blood transfusion management application for healthcare providers.",
     siteName: "BloodCare",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BloodCare - Blood Donation Management System",
-    description: "Professional patient blood donation management application for healthcare providers.",
+    title: "BloodCare - Blood Transfusion Management System",
+    description: "Professional patient blood transfusion management application for healthcare providers.",
   },
   robots: {
     index: true,

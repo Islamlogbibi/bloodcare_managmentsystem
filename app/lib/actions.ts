@@ -11,7 +11,7 @@ export interface PatientStats {
 }
 
 const client = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017")
-const dbName = "blood_donation_system"
+const dbName = "blood_transfusion_system"
 
 async function connectToDatabase() {
   try {
@@ -283,7 +283,7 @@ export async function scheduleTransfusion(transfusionData: any) {
     // Insert the transfusion
     const result = await transfusionsCollection.insertOne(transfusion)
 
-    // Update the patient's last donation date
+    // Update the patient's last transfusion date
     const patient = await db.collection("patients").findOne({ _id: new ObjectId(patientId) })
 
     if (!patient) {

@@ -139,14 +139,14 @@ export default function AnalyticsPageClient() {
             </div>
           }
         >
-          <AnalyticsStats dateRange={dateRange} key={`stats-${refreshKey}`} />
+          <AnalyticsStats dateRange={dateRange} key={`stats-${refreshKey}`} language={language} />
         </Suspense>
 
         {/* Charts */}
         <Card className="border-0 shadow-md">
           <CardHeader>
-            <CardTitle className="text-gray-900">Graphiques et tendances</CardTitle>
-            <CardDescription>Représentation visuelle des données de transfusion</CardDescription>
+            <CardTitle className="text-gray-900">{language === "en" ? "Charts and Trends" : language === "fr" ? "Graphiques et tendances" : "الرسوم البيانية والاتجاهات"}</CardTitle>
+            <CardDescription>{language === "en" ? "Visual representation of transfusion data" : language === "fr" ? "Représentation visuelle des données de transfusion" : "تصور مرئي لبيانات النقل"}</CardDescription>
           </CardHeader>
           <CardContent>
             <Suspense fallback={<div className="h-96 bg-gray-100 rounded animate-pulse"></div>}>

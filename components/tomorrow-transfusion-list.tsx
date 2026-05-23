@@ -26,7 +26,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
   const pendingTransfusions = transfusions.filter((t) => t.status !== "completed")
   const completedTransfusions = transfusions.filter((t) => t.status === "completed")
   const handleRemove = async (transfusionId: string) => {
-    const confirm = window.confirm("Êtes-vous sûr de vouloir supprimer cette transfusion ?")
+    const confirm = window.confirm(t("confirmDelete"))
     if (!confirm) return
 
     setDeletingId(transfusionId)
@@ -34,15 +34,15 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
       await deleteTransfusionById(transfusionId)
       setTransfusions((prev) => prev.filter((t) => t._id !== transfusionId))
       toast({
-        title: "Supprimé",
-        description: "Transfusion supprimée avec succès.",
+        title: t("deleted"),
+        description: t("transfusionDeleted"),
       })
       router.refresh()
     } catch (err) {
       console.error("Failed to delete transfusion:", err)
       toast({
-        title: "Erreur",
-        description: "Échec de la suppression de la transfusion.",
+        title: t("error"),
+        description: t("deletionFailed"),
         variant: "destructive",
       })
     } finally {
@@ -57,8 +57,8 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
     return (
       <div className="text-center py-12">
         <Clock className="mx-auto h-16 w-16 text-gray-300" />
-        <h3 className="mt-4 text-lg font-semibold text-gray-900">Aucune transfusion programmée</h3>
-        <p className="mt-2 text-gray-600">Il n'y a pas de transfusions sanguines programmées pour demain.</p>
+        <h3 className="mt-4 text-lg font-semibold text-gray-900">{t("noTransfusionScheduled")}</h3>
+        <p className="mt-2 text-gray-600">{t("noBloodTransfusionsScheduled")}</p>
       </div>
     )
   }
@@ -68,7 +68,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
       <div className="flex justify-end mb-4 print:hidden">
         <Button variant="outline" onClick={handlePrint}>
           <Printer className="mr-2 h-4 w-4" />
-          Imprimer
+          {t("print")}
         </Button>
       </div>
       <div className="hidden print:block print-header alg">

@@ -170,12 +170,14 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
     return (
       <div className="text-center py-12">
         <Clock className="mx-auto h-16 w-16 text-gray-300" />
-        <h3 className="mt-4 text-lg font-semibold text-gray-900">Aucune transfusion programmée</h3>
-        <p className="mt-2 text-gray-600">Il n'y a pas de transfusions sanguines programmées pour aujourd'hui.</p>
-        <Button className="mt-4 bg-red-600 hover:bg-red-700">
-          <Plus className="mr-2 h-4 w-4" />
-          Programmer une transfusion
-        </Button>
+        <h3 className="mt-4 text-lg font-semibold text-gray-900">{t("noTransfusionScheduled")}</h3>
+        <p className="mt-2 text-gray-600">{t("noBloodTransfusionsScheduledToday")}</p>
+        <Link href="/transfusions/schedule">
+          <Button className="mt-4 bg-red-600 hover:bg-red-700">
+            <Plus className="mr-2 h-4 w-4" />
+            {t("scheduleTransfusion")}
+          </Button>
+        </Link>
       </div>
     )
   }
@@ -195,7 +197,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
         </div>
         <Button variant="outline" onClick={handlePrint}>
           <Printer className="mr-2 h-4 w-4" />
-          Imprimer
+          {t("print")}
         </Button>
       </div>
 
@@ -210,8 +212,8 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
         <h1>CHEF DE SERVICE PR. BROUK HACENE</h1>
       </div>
       <div className="hidden print:block print-header">
-        <h1>Rapport quotidien des transfusions</h1>
-        <p>Programme des transfusions sanguines - </p>
+        <h1>{t("dailyTransfusionReport")}</h1>
+        <p>{t("transfusionSchedule")} - </p>
         <h3>
           {" "}
           {new Date().toLocaleDateString("fr-FR", {

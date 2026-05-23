@@ -10,6 +10,7 @@ import { format, differenceInDays } from "date-fns"
 import { fr } from "date-fns/locale"
 import { DeletePatientButton } from "@/components/delete-patient-button"
 import { QuickScheduleDialog } from "@/components/quick-schedule-dialog"
+import { useLanguage } from "@/contexts/language-context"
 import { useState, useEffect } from "react"
 
 interface PatientListProps {
@@ -22,6 +23,7 @@ interface PatientListProps {
 }
 
 export function PatientList({ searchParams = {} }: PatientListProps) {
+  const { t } = useLanguage()
   const [patients, setPatients] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -65,7 +67,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
       setPatients(data)
     } catch (err) {
       console.error("Error fetching patients:", err)
-      setError(err instanceof Error ? err.message : "Échec du chargement des patients")
+      setError(err instanceof Error ? err.message : t("failedLoadingPatients"))
     } finally {
       setLoading(false)
     }
@@ -174,12 +176,12 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
             />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Erreur lors du chargement des patients</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">{t("errorLoadingPatients")}</h3>
         <p className="text-gray-600 mb-4">
-          Une erreur s'est produite lors du chargement des données des patients. Veuillez réessayer.
+          {t("failedLoadingPatients")}
         </p>
         <Button onClick={fetchPatients} className="bg-red-600 hover:bg-red-700">
-          Réessayer
+          {t("retry")}
         </Button>
       </div>
     )
@@ -198,10 +200,10 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
             />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Aucun patient trouvé</h3>
-        <p className="text-gray-600 mb-4">Essayez d'ajuster vos critères de recherche ou vos filtres.</p>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">{t("patientFound")}</h3>
+        <p className="text-gray-600 mb-4">{t("tryAdjustingSearch")}</p>
         <Link href="/patients/new">
-          <Button className="bg-red-600 hover:bg-red-700">Ajouter un Nouveau Patient</Button>
+          <Button className="bg-red-600 hover:bg-red-700">{t("addNewPatient")}</Button>
         </Link>
       </div>
     )
@@ -213,20 +215,20 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
         <Table>
           <TableHeader className="bg-gray-50">
             <TableRow>
-              <TableHead className="font-semibold text-gray-900">NOM ET PRÉNOM</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("nomEtPrenom")}</TableHead>
               <TableHead className="font-semibold text-gray-900 text-center">GP</TableHead>
               <TableHead className="font-semibold text-gray-900 text-center">PH</TableHead>
               <TableHead className="font-semibold text-gray-900 text-center">F</TableHead>
               <TableHead className="font-semibold text-gray-900 text-center">C</TableHead>
               <TableHead className="font-semibold text-gray-900 text-center">L</TableHead>
-              <TableHead className="font-semibold text-gray-900">DERNIÈRE T</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("derniereT")}</TableHead>
 
               <TableHead
                 className="font-semibold text-gray-900 cursor-pointer"
                 onClick={() => requestSort("daysElapsed")}
               >
                 <div className="flex items-center">
-                  J/ÉCOULÉS
+                  {t("jecoulés")}
                   <ArrowUpDown className="ml-1 h-4 w-4" />
                 </div>
               </TableHead>

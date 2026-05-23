@@ -3,6 +3,13 @@
 import { MongoClient, ObjectId } from "mongodb"
 import { revalidatePath } from "next/cache"
 
+export interface PatientStats {
+  totalPatients: number
+  todayTransfusions: number
+  tomorrowTransfusions: number
+  urgentCases: number
+}
+
 const client = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017")
 const dbName = "blood_donation_system"
 

@@ -14,8 +14,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { useLanguage } from "@/contexts/language-context"
 
 export function Header() {
+  const { t } = useLanguage()
   const [profileData, setProfileData] = useState({
     fullName: "Pr. brouk hassen",
     email: "brouk.hassen@univ-annaba.com",
@@ -61,14 +63,14 @@ export function Header() {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Rechercher..."
+              placeholder={t("search")}
               className="w-full bg-background pl-8 md:w-[300px] lg:w-[400px]"
             />
           </div>
         </form>
         <Button variant="outline" size="icon" className="h-8 w-8 md:hidden bg-transparent">
           <Search className="h-4 w-4" />
-          <span className="sr-only">Rechercher</span>
+          <span className="sr-only">{t("search")}</span>
         </Button>
       </div>
       <div className="flex items-center gap-2">
@@ -84,12 +86,12 @@ export function Header() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Mon Compte</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("myProfile")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link href="/settings" className="flex items-center">
                 <Settings className="mr-2 h-4 w-4" />
-                <span>Paramètres</span>
+                <span>{t("settings")}</span>
               </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>

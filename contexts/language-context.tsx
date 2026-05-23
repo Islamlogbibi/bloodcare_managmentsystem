@@ -215,6 +215,16 @@ const translations = {
     viewDetails: "View Details",
     editDetails: "Edit Details",
 
+    // History and Transfusion Pages
+    addPatientForDay: "Add patient for this day",
+    addTransfusion: "Add Transfusion",
+    selectPatient: "Select a patient",
+    priority: "Priority",
+    bags: "Bags",
+    hdist: "H.dist",
+    hreceived: "H.received",
+    noTransfusionFound: "No transfusion found.",
+
     // Messages
     success: "Success",
     error: "Error",
@@ -429,6 +439,16 @@ const translations = {
     viewDetails: "Voir les Détails",
     editDetails: "Modifier les Détails",
 
+    // History and Transfusion Pages
+    addPatientForDay: "Ajouter un patient pour ce jour",
+    addTransfusion: "Ajouter une Transfusion",
+    selectPatient: "Sélectionner un patient",
+    priority: "Priorité",
+    bags: "Poches",
+    hdist: "H.dist",
+    hreceived: "H.reçu",
+    noTransfusionFound: "Aucune transfusion trouvée.",
+
     // Messages
     success: "Succès",
     error: "Erreur",
@@ -642,6 +662,16 @@ const translations = {
     actions: "الإجراءات",
     viewDetails: "عرض التفاصيل",
     editDetails: "تعديل التفاصيل",
+
+    // History and Transfusion Pages
+    addPatientForDay: "إضافة مريض لهذا اليوم",
+    addTransfusion: "إضافة نقل دم",
+    selectPatient: "اختر مريضًا",
+    priority: "الأولوية",
+    bags: "الأكياس",
+    hdist: "H.dist",
+    hreceived: "H.مستقبل",
+    noTransfusionFound: "لم يتم العثور على أي نقل دم.",
 
     // Messages
     success: "نجح",

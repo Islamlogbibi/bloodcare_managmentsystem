@@ -48,35 +48,25 @@ export async function POST(req: NextRequest) {
 
     const db = await getDatabase()
     const transfusions = db.collection("transfusions")
-    const patients = db.collection("patients")
 
     // Create the scheduled time from the date
     const scheduledTime = new Date(date)
     scheduledTime.setHours(8, 0, 0, 0) // Default to 8:00 AM
 
-    // Update patient document with the transfusion details (matching the pattern used in today-transfusion-list)
-    await patients.updateOne(
-      { _id: new ObjectId(patientId) },
-      {
-        $set: {
-          hb: hb || "",
-          poches: poches || "",
-          Hdist: Hdist || "",
-          Hrecu: Hrecu || "",
-          hasF: hasF || false,
-          hasC: hasC || false,
-          hasL: hasL || false,
-          updatedAt: new Date(),
-        }
-      }
-    )
-
     const newTransfusion = {
       patientId: new ObjectId(patientId),
+      scheduledDate: new Date(new Date(date).setHours(0, 0, 0, 0)),
       scheduledTime,
       priority: priority || "normal",
       description: description || "",
       status: "scheduled",
+      hb: hb || "",
+      poches: poches || "",
+      Hdist: Hdist || "",
+      Hrecu: Hrecu || "",
+      hasF: hasF || false,
+      hasC: hasC || false,
+      hasL: hasL || false,
       createdAt: new Date(),
       updatedAt: new Date(),
     }

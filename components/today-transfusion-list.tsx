@@ -313,13 +313,12 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                     </Badge>
                   </TableCell>
                   {(() => {
-                    // Fallback logic: use transfusion data if available, else use patient data
-                    const hasF = transfusion.hasF !== undefined ? transfusion.hasF : transfusion.patient.hasF
-                    const hasC = transfusion.hasC !== undefined ? transfusion.hasC : transfusion.patient.hasC
-                    const hasL = transfusion.hasL !== undefined ? transfusion.hasL : transfusion.patient.hasL
-                    const poches = transfusion.poches || transfusion.patient.poches
-                    const hb = transfusion.hb || transfusion.patient.hb
-                    const description = transfusion.description || transfusion.patient.don
+                    const hasF = !!transfusion.hasF
+                    const hasC = !!transfusion.hasC
+                    const hasL = !!transfusion.hasL
+                    const poches = transfusion.poches || transfusion.bloodUnits || "-"
+                    const hb = transfusion.hb || "-"
+                    const description = transfusion.description || transfusion.notes || "-"
                     
                     return (
                       <>
@@ -394,7 +393,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       )}
                     </div>
                     <div></div>
-                    <Link href={`/transfusions/today/${transfusion.patient._id}/edit`}>
+                    <Link href={`/transfusions/today/${transfusion._id}/edit`}>
                       <Button variant="ghost" size="sm" className="h-8 w-20 p-0 hover:bg-blue-50">
                         <Edit className="h-4 w-4 text-blue-600" /> Modifier
                       </Button>
@@ -517,13 +516,12 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                         </Badge>
                       </TableCell>
                       {(() => {
-                        // Fallback logic for second table
-                        const hasF2 = transfusion.hasF !== undefined ? transfusion.hasF : transfusion.patient.hasF
-                        const hasC2 = transfusion.hasC !== undefined ? transfusion.hasC : transfusion.patient.hasC
-                        const hasL2 = transfusion.hasL !== undefined ? transfusion.hasL : transfusion.patient.hasL
-                        const poches2 = transfusion.poches || transfusion.patient.poches
-                        const hb2 = transfusion.hb || transfusion.patient.hb
-                        const description2 = transfusion.description || transfusion.patient.don
+                        const hasF2 = !!transfusion.hasF
+                        const hasC2 = !!transfusion.hasC
+                        const hasL2 = !!transfusion.hasL
+                        const poches2 = transfusion.poches || transfusion.bloodUnits || "-"
+                        const hb2 = transfusion.hb || "-"
+                        const description2 = transfusion.description || transfusion.notes || "-"
                         
                         return (
                           <>
@@ -570,7 +568,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           </>
                         )
                       })()}
-
+ 
                       <TableCell className="hidden print:table-cell">
                         <Badge className="bg-green-100 text-green-800">Présent</Badge>
                       </TableCell>
@@ -588,7 +586,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                             </Button>
                           )}
                         </div>
-
+ 
                         <div className="flex items-center space-x-2">
                           {transfusion.status !== "completed" && (
                             <Button
@@ -603,7 +601,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           )}
                         </div>
                         <div></div>
-                        <Link href={`/transfusions/today/${transfusion.patient._id}/edit`}>
+                        <Link href={`/transfusions/today/${transfusion._id}/edit`}>
                           <Button variant="ghost" size="sm" className="h-8 w-20 p-0 hover:bg-blue-50">
                             <Edit className="h-4 w-4 text-blue-600" /> Modifier
                           </Button>

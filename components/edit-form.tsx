@@ -18,67 +18,47 @@ interface PatientFormProps {
   isEditing?: boolean
 }
 
-export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
+export function PatientForm({ patient: transfusion, isEditing = false }: PatientFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const [Hdist, setHdist] = useState<string | undefined>(patient?.Hdist ?? undefined)
+  const [Hdist, setHdist] = useState<string | null>(transfusion?.Hdist ?? null)
 
-  const [Hrecu, setHrecu] = useState<string | undefined>(patient?.Hrecu ?? undefined)
-  const [poches, setPoches] = useState<string | undefined>(patient?.poches?.toString())
-  const [hb, sethb] = useState<string | undefined>(patient?.hb?.toString())
-  const [don, setdon] = useState<string | undefined>(patient?.don?.toString())
+  const [Hrecu, setHrecu] = useState<string | null>(transfusion?.Hrecu ?? null)
+  const [poches, setPoches] = useState<string | null>(transfusion?.poches?.toString() ?? transfusion?.bloodUnits?.toString() ?? null)
+  const [hb, sethb] = useState<string | null>(transfusion?.hb?.toString() ?? null)
+  const [don, setdon] = useState<string | null>(transfusion?.don ?? null);
 
   async function onSubmit(formData: FormData) {
     setIsLoading(true)
 
     try {
       const parsedPoches = poches ? parseInt(poches) : undefined;
+      const parsedHb = hb ? parseFloat(hb) : undefined;
 
-      const patientData: any = {
+      const data: any = {
+        transfusionId: transfusion?._id,
         Hdist,
         Hrecu,
         poches: parsedPoches,
-        hb: hb ? parseFloat(hb) : undefined,
-        don,
-        lastTransfusionDate: patient.lastTransfusionDate,
-      };
-      const data: any = {
-        patientId: patient?._id,
-        Hdist,
-        Hrecu,
-        poches: parsedPoches, 
-        hb: hb ? parseFloat(hb) : undefined,
-        don,
+        bloodUnits: parsedPoches,
+        hb: parsedHb,
+        don: don ?? null,
       };
 
-      if (
-        isEditing &&
-        patient &&
-        (patient.poches === null || patient.poches === 0 || patient.poches === undefined) &&
-        parsedPoches && parsedPoches > 0
-      ) {
-        patientData.lastTransfusionDate = new Date();
-      }
-
-      if (isEditing && patient) {
-        
-        await updatePatient(patient._id, patientData)
+      if (isEditing && transfusion) {
         await updatehistory(data)
         
-        
         toast({
-          title: "Patient mis à jour",
-          description: "Les informations du patient ont été mises à jour avec succès.",
+          title: "Transfusion mise à jour",
+          description: "Les informations de la transfusion ont été mises à jour avec succès.",
         })
       } else {
-        await createPatient(patientData)
+        await createPatient(data)
         toast({
           title: "Patient enregistré",
           description: "Le nouveau patient a été enregistré avec succès.",
         })
       }
-
-      
 
       router.push("/transfusions/today")
     } catch (error) {
@@ -163,8 +143,8 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
                 <SelectValue placeholder="Don" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="yes">Oui</SelectItem>
-                <SelectItem value="no">Non</SelectItem>
+                <SelectItem value="yes">Yes</SelectItem>
+                <SelectItem value="no">No</SelectItem>
               </SelectContent>
             </Select>
           </div>

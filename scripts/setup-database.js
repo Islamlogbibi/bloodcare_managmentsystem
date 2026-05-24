@@ -46,6 +46,8 @@ async function setupDatabase() {
     await db.collection("transfusions").createIndex({ priority: 1, status: 1 })
     await db.collection("transfusions").createIndex({ status: 1 })
     await db.collection("transfusions").createIndex({ createdAt: -1 })
+    await db.collection("transfusions").createIndex({ patientId: 1, scheduledTime: 1 })
+    await db.collection("transfusions").createIndex({ patientId: 1, createdAt: -1 })
     console.log("✅ Created transfusions indexes")
 
     // Notifications indexes

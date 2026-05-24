@@ -65,7 +65,7 @@ export function DashboardClient({ stats }: DashboardClientProps) {
             value={stats.urgentCases}
             icon={AlertTriangle}
             description={t("urgentCases")}
-            trend="2 critical"
+            trend=""
             variant="destructive"
           />
         </div>

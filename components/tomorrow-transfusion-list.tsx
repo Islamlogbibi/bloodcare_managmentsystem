@@ -125,16 +125,16 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="font-semibold border-red-200 text-red-700">
-                      {transfusion.patient.bloodType}
+                      {transfusion.patient?.bloodType || "-"}
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="font-semibold border-red-200 text-red-700">
-                      {transfusion.patient.ph}
+                      {transfusion.patient?.ph || "-"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-center">
-                    {transfusion.patient.hasF ? (
+                    {transfusion.patient?.hasF ? (
                       <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
                         <span className="text-white text-xs">✓</span>
                       </div>
@@ -143,7 +143,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
                     )}
                   </TableCell>
                   <TableCell className="text-center">
-                    {transfusion.patient.hasC ? (
+                    {transfusion.patient?.hasC ? (
                       <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
                         <span className="text-white text-xs">✓</span>
                       </div>
@@ -152,7 +152,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
                     )}
                   </TableCell>
                   <TableCell className="text-center">
-                    {transfusion.patient.hasL ? (
+                    {transfusion.patient?.hasL ? (
                       <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
                         <span className="text-white text-xs">✓</span>
                       </div>
@@ -163,7 +163,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
                   <TableCell>
                     <div className="flex items-center text-xs text-gray-500">
                       <Phone className="h-3 w-3 mr-1" />
-                      {transfusion.patient.phone}
+                      {transfusion.patient?.phone || "-"}
                     </div>
                   </TableCell>
                   <TableCell>

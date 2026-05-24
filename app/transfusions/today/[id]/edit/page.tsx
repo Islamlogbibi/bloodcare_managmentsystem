@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { PatientForm } from "@/components/edit-form"
-import { getPatientById } from "@/app/lib/actions"
+import { getTransfusionById } from "@/app/lib/actions"
 import { notFound } from "next/navigation"
 
 interface EditPatientPageProps {
@@ -9,9 +9,9 @@ interface EditPatientPageProps {
 
 export default async function EditPatientPage({ params }: EditPatientPageProps) {
   const { id } = await params
-  const patient = await getPatientById(id)
+  const transfusion = await getTransfusionById(id)
 
-  if (!patient) {
+  if (!transfusion) {
     notFound()
   }
 
@@ -27,7 +27,7 @@ export default async function EditPatientPage({ params }: EditPatientPageProps) 
           <CardDescription>Mettre à jour les coordonnées du patient et les informations sur le don de sang</CardDescription>
         </CardHeader>
         <CardContent>
-          <PatientForm patient={patient} isEditing={true} />
+          <PatientForm patient={transfusion} isEditing={true} />
         </CardContent>
       </Card>
     </div>

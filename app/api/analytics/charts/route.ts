@@ -1,4 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
+
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 import { MongoClient } from "mongodb"
 
 const client = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017")

@@ -19,6 +19,7 @@ export class TransfusionService {
 
   async createTransfusion(data: CreateTransfusionInput) {
     const collection = await this.getCollection()
+    const patientsCollection = await this.getPatientsCollection()
 
     const transfusion = {
       ...data,
@@ -29,6 +30,13 @@ export class TransfusionService {
     }
 
     const result = await collection.insertOne(transfusion)
+    // If bloodUnits (poches) is provided and > 0, update patient's lastTransfusionDate
+    if (data.bloodUnits && Number(data.bloodUnits) > 0) {
+      await patientsCollection.updateOne(
+        { _id: new ObjectId(transfusion.patientId) },
+        { $set: { lastTransfusionDate: new Date() } }
+      )
+    }
     return { ...transfusion, _id: result.insertedId }
   }
 
@@ -157,18 +165,56 @@ export class TransfusionService {
     }
   }
 
+  async getTransfusionsByPatientId(patientId: string) {
+    const collection = await this.getCollection()
+    const query = { patientId: new ObjectId(patientId) }
+    const transfusions = await collection
+      .find(query)
+      .sort({ scheduledTime: -1, createdAt: -1 })
+      .toArray()
+
+    return transfusions.map((t) => ({
+      ...t,
+      _id: t._id.toString(),
+      patientId: t.patientId.toString(),
+    }))
+  }
+
   async updateTransfusion(id: string, data: UpdateTransfusionInput) {
     const collection = await this.getCollection()
+
+    // Enforce mutation strictness (updating status, outcome, or notes only)
+    const allowedKeys = ["status", "notes", "hbf", "startedAt", "completedAt", "statusNotes", "cancellationReason", "hb", "bloodUnits", "poches", "Hdist", "Hrecu", "don"]
+    const filteredData: any = {}
+    for (const key of allowedKeys) {
+      if (data[key as keyof UpdateTransfusionInput] !== undefined) {
+        filteredData[key] = data[key as keyof UpdateTransfusionInput]
+      }
+    }
+
+    const transfusion = await collection.findOne({ _id: new ObjectId(id) })
 
     const result = await collection.updateOne(
       { _id: new ObjectId(id) },
       {
         $set: {
-          ...data,
+          ...filteredData,
           updatedAt: new Date(),
         },
       },
     )
+
+    // If poches or bloodUnits count is provided and non-zero, update patient's lastTransfusionDate
+    if ((filteredData.poches !== undefined || filteredData.bloodUnits !== undefined) && transfusion) {
+      const count = Number(filteredData.poches ?? filteredData.bloodUnits);
+      if (count > 0) {
+        const patientsCollection = await this.getPatientsCollection();
+        await patientsCollection.updateOne(
+          { _id: new ObjectId(transfusion.patientId) },
+          { $set: { lastTransfusionDate: new Date() } },
+        );
+      }
+    }
 
     return result
   }

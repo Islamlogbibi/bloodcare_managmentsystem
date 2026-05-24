@@ -331,66 +331,133 @@ export async function scheduleTransfusion(transfusionData: any) {
     throw new Error("Failed to schedule transfusion")
   }
 }
-export async function updatehbf({ patientId, date, hbf }: { patientId: string; date: string; hbf: number }) {
-  const db = await connectToDatabase()
+export async function getTransfusionsByPatientId(patientId: string) {
+  try {
+    const db = await connectToDatabase()
+    const transfusions = await db
+      .collection("transfusions")
+      .find({ patientId: new ObjectId(patientId) })
+      .sort({ scheduledTime: -1, createdAt: -1 })
+      .toArray()
 
-  const objectId = typeof patientId === "string" ? new ObjectId(patientId) : patientId
-
-  // Convert YYYY-MM-DD to date range for comparison
-  const targetDate = new Date(date)
-
-  const result = await db.collection("patients").updateOne(
-    {
-      _id: objectId,
-      "schedules.date": {
-        $gte: new Date(targetDate.setHours(0, 0, 0, 0)),
-        $lt: new Date(targetDate.setHours(23, 59, 59, 999)),
-      },
-    },
-    {
-      $set: { "schedules.$.hbf": hbf },
-    },
-  )
-
-  if (result.modifiedCount === 0) {
-    throw new Error("No matching schedule found for that date")
+    return transfusions.map((t) => ({
+      ...t,
+      _id: t._id.toString(),
+      patientId: t.patientId.toString(),
+    }))
+  } catch (error) {
+    console.error("Error fetching transfusions by patient ID:", error)
+    return []
   }
-
-  return result
 }
 
-export async function updatehistory(transfusionData: any) {
-  const db = await connectToDatabase()
-  // Ensure patientId is an ObjectId
-  const patientId =
-    typeof transfusionData.patientId === "string" ? new ObjectId(transfusionData.patientId) : transfusionData.patientId
-  const patient = await db.collection("patients").findOne({ _id: new ObjectId(patientId) })
+export async function getPatientTransfusionView(patientId: string) {
+  try {
+    const patient = await getPatientById(patientId)
+    if (!patient) return null
 
-  if (!patient) {
-    throw new Error("Patient not found")
+    const transfusions = await getTransfusionsByPatientId(patientId)
+
+    return {
+      patient,
+      transfusions,
+    }
+  } catch (error) {
+    console.error("Error in getPatientTransfusionView:", error)
+    return null
   }
-  await db.collection("patients").updateOne(
-    { _id: new ObjectId(patientId) },
-    {
-      $push: {
-        schedules: {
-          date: new Date(),
-          priority: patient.priority || "regular",
-          bloodType: patient.bloodType,
-          ph: patient.ph,
-          hb: patient.hb,
-          poches: patient.poches,
-          hasF: patient.hasF,
-          hasC: patient.hasC,
-          hasL: patient.hasL,
-          don: patient.don,
-          Hdist: patient.Hdist,
-          Hrecu: patient.Hrecu,
-        },
-      },
-    },
-  )
 }
+
+export async function getTransfusionById(id: string) {
+  try {
+    if (!ObjectId.isValid(id)) {
+      throw new Error("Invalid transfusion ID")
+    }
+    const db = await connectToDatabase()
+    const transfusion = await db.collection("transfusions").findOne({ _id: new ObjectId(id) })
+    if (!transfusion) return null
+
+    const patient = await db.collection("patients").findOne({ _id: transfusion.patientId })
+
+    return {
+      ...transfusion,
+      _id: transfusion._id.toString(),
+      patientId: transfusion.patientId.toString(),
+      patient: patient ? {
+        ...patient,
+        _id: patient._id.toString(),
+      } : null,
+    }
+  } catch (error) {
+    console.error("Error fetching transfusion by ID:", error)
+    return null
+  }
+}
+
+export async function updatehbf({ transfusionId, hbf }: { transfusionId: string; hbf: number }) {
+  try {
+    if (!ObjectId.isValid(transfusionId)) {
+      throw new Error("Invalid transfusion ID")
+    }
+    const db = await connectToDatabase()
+    const result = await db.collection("transfusions").updateOne(
+      { _id: new ObjectId(transfusionId) },
+      { $set: { hbf, updatedAt: new Date() } }
+    )
+    if (result.matchedCount === 0) {
+      throw new Error("No matching transfusion found")
+    }
+    return { success: true, result }
+  } catch (error) {
+    console.error("Error in updatehbf:", error)
+    throw error
+  }
+}
+
+  export async function updatehistory(transfusionData: any) {
+    try {
+      const db = await connectToDatabase()
+      const { transfusionId, Hdist, Hrecu, poches, bloodUnits, hb, don } = transfusionData
+
+      if (!ObjectId.isValid(transfusionId)) {
+        throw new Error("Invalid transfusion ID")
+      }
+
+      // Update transfusion fields
+      const result = await db.collection("transfusions").updateOne(
+        { _id: new ObjectId(transfusionId) },
+        {
+          $set: {
+            Hdist,
+            Hrecu,
+            poches,
+            bloodUnits,
+            hb,
+            don,
+            updatedAt: new Date(),
+          },
+        }
+      )
+
+      // If poches or bloodUnits count is provided and non-zero, update patient's lastTransfusionDate
+      if ((poches !== undefined || bloodUnits !== undefined) && (Number(poches ?? bloodUnits) > 0)) {
+        const count = Number(poches ?? bloodUnits)
+        if (count > 0) {
+          await db.collection("patients").updateOne(
+            { _id: (await db.collection("transfusions").findOne({ _id: new ObjectId(transfusionId) })).patientId },
+            { $set: { lastTransfusionDate: new Date() } }
+          )
+        }
+      }
+
+      revalidatePath("/transfusions/today")
+      revalidatePath("/transfusions/tomorrow")
+      return { success: true, result }
+    } catch (error) {
+      console.error("Error in updatehistory:", error)
+      throw error
+    }
+  }
 export async function updateTransfusionStatus(transfusionId: string, status: string) {
   try {
     if (!ObjectId.isValid(transfusionId)) {
@@ -630,30 +697,75 @@ export async function getAnalyticsStats(dateRange?: { from?: Date; to?: Date }) 
             })
           })()
         : Promise.resolve(0),
-      patientsCollection
+      transfusionsCollection
         .aggregate([
-          { $match: { status: "active", poches: { $exists: true, $ne: null } } },
+          { $match: { ...dateFilter, status: "completed", poches: { $exists: true, $ne: null } } },
           {
             $group: {
               _id: null,
-              totalUnits: { $sum: "$poches" },
-              avgUnits: { $avg: "$poches" },
-              count: { $sum: 1 },
-            },
-          },
+              totalUnits: {
+                $sum: {
+                  $convert: {
+                    input: "$poches",
+                    to: "double",
+                    onError: 0.0,
+                    onNull: 0.0
+                  }
+                }
+              },
+              avgUnits: {
+                $avg: {
+                  $convert: {
+                    input: "$poches",
+                    to: "double",
+                    onError: 0.0,
+                    onNull: 0.0
+                  }
+                }
+              },
+              count: { $sum: 1 }
+            }
+          }
         ])
         .toArray(),
-      patientsCollection
+      transfusionsCollection
         .aggregate([
-          { $match: { status: "active", hb: { $exists: true, $ne: null } } },
+          { $match: { ...dateFilter, status: "completed", hb: { $exists: true, $ne: null } } },
           {
             $group: {
               _id: null,
-              avgHb: { $avg: "$hb" },
-              minHb: { $min: "$hb" },
-              maxHb: { $max: "$hb" },
-            },
-          },
+              avgHb: {
+                $avg: {
+                  $convert: {
+                    input: "$hb",
+                    to: "double",
+                    onError: null,
+                    onNull: null
+                  }
+                }
+              },
+              minHb: {
+                $min: {
+                  $convert: {
+                    input: "$hb",
+                    to: "double",
+                    onError: null,
+                    onNull: null
+                  }
+                }
+              },
+              maxHb: {
+                $max: {
+                  $convert: {
+                    input: "$hb",
+                    to: "double",
+                    onError: null,
+                    onNull: null
+                  }
+                }
+              }
+            }
+          }
         ])
         .toArray(),
       patientsCollection

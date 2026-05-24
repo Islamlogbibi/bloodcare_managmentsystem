@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { updatehbf } from "@/app/lib/actions";
 import { toast } from "@/hooks/use-toast";
 
-export function Hbfform({ history, patientId, date, isEditing = false }: any) {
+export function Hbfform({ history, patientId, transfusionId, isEditing = false }: any) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [hbf, setHbf] = useState(history?.hbf?.toString() ?? "");
@@ -18,9 +18,9 @@ export function Hbfform({ history, patientId, date, isEditing = false }: any) {
   async function onSubmit() {
     setIsLoading(true);
     try {
-      await updatehbf({ patientId, date, hbf: parseFloat(hbf) });
-      toast({ title: "Mis à jour", description: `HbF du ${date} mis à jour.` });
-      router.push(`/patient/${patientId}/history`);
+      await updatehbf({ transfusionId: transfusionId || history?._id || history?.transfusionId, hbf: parseFloat(hbf) });
+      toast({ title: "Mis à jour", description: "HbF mis à jour." });
+      router.push(`/patients/${patientId}/history`);
     } catch {
       toast({ title: "Erreur", description: "Veuillez réessayer.", variant: "destructive" });
     } finally {
@@ -32,7 +32,7 @@ export function Hbfform({ history, patientId, date, isEditing = false }: any) {
     <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="space-y-8">
       <Card>
         <CardHeader>
-          <CardTitle>Hb Post Transfusion du {date}</CardTitle>
+          <CardTitle>Hb Post Transfusion {history?.scheduledTime || history?.date ? `du ${new Date(history.scheduledTime || history.date).toLocaleDateString()}` : ""}</CardTitle>
         </CardHeader>
         <CardContent> 
           <Input

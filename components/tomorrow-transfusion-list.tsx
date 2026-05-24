@@ -72,12 +72,12 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
         </Button>
       </div>
       <div className="hidden print:block print-header alg">
-        <h1>CHU ANNABA SERVICE D'HÉMOBIOLOGIE ET TRANSFUSION SANGUINE</h1>
-        <h1>CHEF DE SERVICE PR. BROUK HACENE</h1>
+        <h1>{t("chuAnnaba")}</h1>
+        <h1>{t("chefDeService")}</h1>
       </div>
       <div className="hidden print:block print-header">
-        <h1>Rapport quotidien des transfusions</h1>
-        <p>Programme des transfusions sanguines - </p>
+        <h1>{t("dailyTransfusionReport")}</h1>
+        <p>{t("transfusionSchedule")} - </p>
         <h3>
           {" "}
           {new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString('fr-FR', { 
@@ -93,12 +93,12 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
         <Table>
           <TableHeader className="bg-gray-50">
             <TableRow>
-              <TableHead className="font-semibold text-gray-900">Patient</TableHead>
-              <TableHead className="font-semibold text-gray-900">Groupe sanguin</TableHead>
-              <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
-              <TableHead className="font-semibold text-gray-900">F</TableHead>
-              <TableHead className="font-semibold text-gray-900">C</TableHead>
-              <TableHead className="font-semibold text-gray-900">L</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("patient")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("bloodType")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("phenotype")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("hasF")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("hasC")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("hasL")}</TableHead>
               <TableHead className="font-semibold text-gray-900">Contact</TableHead>
             </TableRow>
           </TableHeader>
@@ -172,7 +172,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
                       size="sm"
                       onClick={() => handleRemove(transfusion._id)}
                     >
-                      Supprimer
+                      {t("delete")}
                     </Button>
                   </TableCell>
                 </TableRow>

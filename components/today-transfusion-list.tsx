@@ -84,16 +84,16 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
       setTransfusions((prev) => prev.map((t) => (t._id === transfusionId ? { ...t, status: "completed" } : t)))
 
       toast({
-        title: "Terminé",
-        description: "Transfusion marquée comme terminée avec succès.",
+        title: t("success"),
+        description: t("transfusionUpdated"),
       })
 
       router.refresh()
     } catch (error) {
       console.error("Error updating transfusion status:", error)
       toast({
-        title: "Erreur",
-        description: "Échec de marquage de la transfusion comme terminée.",
+        title: t("error"),
+        description: t("failedScheduling"),
         variant: "destructive",
       })
     } finally {
@@ -115,16 +115,16 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
       setTransfusions((prev) => prev.map((t) => (t._id === transfusionId ? { ...t, status: "notcompleted" } : t)))
 
       toast({
-        title: "Annulé",
-        description: "Marquage terminé annulé avec succès.",
+        title: t("success"),
+        description: t("transfusionUpdated"),
       })
 
       router.refresh()
     } catch (error) {
       console.error("Error updating transfusion status:", error)
       toast({
-        title: "Erreur",
-        description: "Échec de l'annulation.",
+        title: t("error"),
+        description: t("deletionFailed"),
         variant: "destructive",
       })
     } finally {
@@ -138,7 +138,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
   const [deletingId, setDeletingId] = useState<string | null>(null)
 
   const handleDelete = async (transfusionId: string) => {
-    const confirm = window.confirm("Êtes-vous sûr de vouloir supprimer cette transfusion ?")
+    const confirm = window.confirm(t("confirmDeleteTransfusion"))
     if (!confirm) return
 
     setDeletingId(transfusionId)
@@ -146,15 +146,15 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
       await deleteTransfusionById(transfusionId)
       setTransfusions((prev) => prev.filter((t) => t._id !== transfusionId))
       toast({
-        title: "Supprimé",
-        description: "Transfusion supprimée avec succès.",
+        title: t("deleted"),
+        description: t("transfusionDeleted"),
       })
       router.refresh()
     } catch (err) {
       console.error("Failed to delete transfusion:", err)
       toast({
-        title: "Erreur",
-        description: "Échec de la suppression de la transfusion.",
+        title: t("error"),
+        description: t("deletionFailed"),
         variant: "destructive",
       })
     } finally {
@@ -189,7 +189,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
             type="text"
-            placeholder="Rechercher par nom du patient..."
+            placeholder={t("searchByPatientName")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -203,13 +203,16 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
 
       {searchQuery.trim() && (
         <div className="text-sm text-gray-600 mb-4 print:hidden">
-          Affichage de {filteredTransfusions.length} sur {transfusions.length} transfusions correspondant à "{searchQuery}"
+          {t("showingTransfusionsMatching")
+            .replace("{count}", filteredTransfusions.length.toString())
+            .replace("{total}", transfusions.length.toString())
+            .replace("{query}", searchQuery)}
         </div>
       )}
 
       <div className="hidden print:block print-header alg">
-        <h1>CHU ANNABA SERVICE D'HÉMOBIOLOGIE ET TRANSFUSION SANGUINE</h1>
-        <h1>CHEF DE SERVICE PR. BROUK HACENE</h1>
+        <h1>{t("chuAnnaba")}</h1>
+        <h1>{t("chefDeService")}</h1>
       </div>
       <div className="hidden print:block print-header">
         <h1>{t("dailyTransfusionReport")}</h1>
@@ -225,8 +228,8 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
         </h3>
       </div>
       <div className="hidden print:block print-header">
-        <strong>Résumé :</strong> {filteredTransfusions.length} commandes au total
-        {completedTransfusions.length > 0 && <span> ({completedTransfusions.length} commandes distribuées)</span>}
+        <strong>Résumé :</strong> {t("totalOrders").replace("{count}", filteredTransfusions.length.toString())}
+        {completedTransfusions.length > 0 && <span> ({t("deliveredOrders").replace("{count}", completedTransfusions.length.toString())})</span>}
       </div>
 
       {/* Transfusions en attente */}
@@ -234,16 +237,16 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
         <Table>
           <TableHeader className="bg-gray-50">
             <TableRow>
-              <TableHead className="font-semibold text-gray-900">H.dist</TableHead>
-              <TableHead className="font-semibold text-gray-900">H.reçu</TableHead>
-              <TableHead className="font-semibold text-gray-900">Patient</TableHead>
-              <TableHead className="font-semibold text-gray-900">Groupe sanguin</TableHead>
-              <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
-              <TableHead className="font-semibold text-gray-900">F</TableHead>
-              <TableHead className="font-semibold text-gray-900">C</TableHead>
-              <TableHead className="font-semibold text-gray-900">L</TableHead>
-              <TableHead className="font-semibold text-gray-900">Priorité</TableHead>
-              <TableHead className="font-semibold text-gray-900">Poches</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("hdist")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("hreceived")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("patient")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("bloodType")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("phenotype")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("hasF")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("hasC")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("hasL")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("priority")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("bags")}</TableHead>
               <TableHead
                 className="font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none print:cursor-default print:hover:bg-gray-50"
                 onClick={handleHbSort}
@@ -258,9 +261,9 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   </div>
                 </div>
               </TableHead>
-              <TableHead className="font-semibold text-gray-900">Don</TableHead>
-              <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
-              <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Présence</TableHead>
+              <TableHead className="font-semibold text-gray-900">{t("don")}</TableHead>
+              <TableHead className="font-semibold text-gray-900 print:hidden">{t("actions")}</TableHead>
+              <TableHead className="font-semibold text-gray-900 hidden print:table-cell">{t("presence")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -356,7 +359,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                             }
                           >
                             {transfusion.priority === "urgent" && <AlertTriangle className="h-3 w-3 mr-1" />}
-                            {transfusion.priority === "urgent" ? "Urgent" : "Normal"}
+                            {transfusion.priority === "urgent" ? t("urgente") : t("normale")}
                           </Badge>
                         </TableCell>
                         <TableCell className="font-semibold">{poches}</TableCell>
@@ -375,7 +378,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           disabled={isCompleting}
                         >
                           <CheckCircle className="h-3 w-3 mr-1" />
-                          {isCompleting ? "Chargement..." : "Marquer terminé"}
+                          {isCompleting ? t("loading") : t("markCompleted")}
                         </Button>
                       )}
                     </div>
@@ -388,14 +391,14 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           disabled={isCompleting}
                         >
                           <CheckCircle className="h-3 w-3 mr-1" />
-                          {isCompleting ? "Chargement..." : "Annuler"}
+                          {isCompleting ? t("loading") : t("unmarkCompleted")}
                         </Button>
                       )}
                     </div>
                     <div></div>
                     <Link href={`/transfusions/today/${transfusion._id}/edit`}>
                       <Button variant="ghost" size="sm" className="h-8 w-20 p-0 hover:bg-blue-50">
-                        <Edit className="h-4 w-4 text-blue-600" /> Modifier
+                        <Edit className="h-4 w-4 text-blue-600" /> {t("edit")}
                       </Button>
                     </Link>
                     <Button
@@ -405,7 +408,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       className="h-8 w-20"
                       disabled={deletingId === transfusion._id}
                     >
-                      {deletingId === transfusion._id ? "..." : "Supprimer"}
+                      {deletingId === transfusion._id ? "..." : t("delete")}
                     </Button>
                   </TableCell>
                   <TableCell className="hidden print:table-cell">
@@ -414,7 +417,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                         transfusion.status === "completed" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                       }
                     >
-                      {transfusion.status === "completed" ? "Présent" : "Absent"}
+                      {transfusion.status === "completed" ? t("present") : t("absent")}
                     </Badge>
                   </TableCell>
                 </TableRow>
@@ -429,7 +432,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
         <>
           <div className="flex items-center my-6">
             <div className="flex-grow h-px bg-gray-300"></div>
-            <span className="px-4 text-gray-500 font-medium">Transfusions urgentes</span>
+            <span className="px-4 text-gray-500 font-medium">{t("urgentTransfusions")}</span>
             <div className="flex-grow h-px bg-gray-300"></div>
           </div>
 
@@ -437,16 +440,16 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             <Table>
               <TableHeader className="bg-gray-50">
                 <TableRow>
-                  <TableHead className="font-semibold text-gray-900">H.dist</TableHead>
-                  <TableHead className="font-semibold text-gray-900">H.reçu</TableHead>
-                  <TableHead className="font-semibold text-gray-900">Patient</TableHead>
-                  <TableHead className="font-semibold text-gray-900">Groupe sanguin</TableHead>
-                  <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
-                  <TableHead className="font-semibold text-gray-900">F</TableHead>
-                  <TableHead className="font-semibold text-gray-900">C</TableHead>
-                  <TableHead className="font-semibold text-gray-900">L</TableHead>
-                  <TableHead className="font-semibold text-gray-900">Priorité</TableHead>
-                  <TableHead className="font-semibold text-gray-900">Poches</TableHead>
+                  <TableHead className="font-semibold text-gray-900">{t("hdist")}</TableHead>
+                  <TableHead className="font-semibold text-gray-900">{t("hreceived")}</TableHead>
+                  <TableHead className="font-semibold text-gray-900">{t("patient")}</TableHead>
+                  <TableHead className="font-semibold text-gray-900">{t("bloodType")}</TableHead>
+                  <TableHead className="font-semibold text-gray-900">{t("phenotype")}</TableHead>
+                  <TableHead className="font-semibold text-gray-900">{t("hasF")}</TableHead>
+                  <TableHead className="font-semibold text-gray-900">{t("hasC")}</TableHead>
+                  <TableHead className="font-semibold text-gray-900">{t("hasL")}</TableHead>
+                  <TableHead className="font-semibold text-gray-900">{t("priority")}</TableHead>
+                  <TableHead className="font-semibold text-gray-900">{t("bags")}</TableHead>
                   <TableHead
                     className="font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none print:cursor-default print:hover:bg-gray-50"
                     onClick={handleHbSort}
@@ -461,9 +464,9 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       </div>
                     </div>
                   </TableHead>
-                  <TableHead className="font-semibold text-gray-900">Don</TableHead>
-                  <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Présence</TableHead>
-                  <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
+                  <TableHead className="font-semibold text-gray-900">{t("don")}</TableHead>
+                  <TableHead className="font-semibold text-gray-900 hidden print:table-cell">{t("presence")}</TableHead>
+                  <TableHead className="font-semibold text-gray-900 print:hidden">{t("actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -559,7 +562,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                                 }
                               >
                                 {transfusion.priority === "urgent" && <AlertTriangle className="h-3 w-3 mr-1" />}
-                                {transfusion.priority === "urgent" ? "Urgent" : "Normal"}
+                                {transfusion.priority === "urgent" ? t("urgente") : t("normale")}
                               </Badge>
                             </TableCell>
                             <TableCell className="font-semibold">{poches2}</TableCell>
@@ -570,7 +573,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       })()}
  
                       <TableCell className="hidden print:table-cell">
-                        <Badge className="bg-green-100 text-green-800">Présent</Badge>
+                        <Badge className="bg-green-100 text-green-800">{t("present")}</Badge>
                       </TableCell>
                       <TableCell className="print:hidden flex items-center space-x-2">
                         <div className="flex items-center space-x-2">
@@ -582,7 +585,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                               disabled={isCompleting}
                             >
                               <CheckCircle className="h-3 w-3 mr-1" />
-                              {isCompleting ? "Chargement..." : "Annuler"}
+                              {isCompleting ? t("loading") : t("unmarkCompleted")}
                             </Button>
                           )}
                         </div>
@@ -596,14 +599,14 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                               disabled={isCompleting}
                             >
                               <CheckCircle className="h-3 w-3 mr-1" />
-                              {isCompleting ? "Chargement..." : "Marquer terminé"}
+                              {isCompleting ? t("loading") : t("markCompleted")}
                             </Button>
                           )}
                         </div>
                         <div></div>
                         <Link href={`/transfusions/today/${transfusion._id}/edit`}>
                           <Button variant="ghost" size="sm" className="h-8 w-20 p-0 hover:bg-blue-50">
-                            <Edit className="h-4 w-4 text-blue-600" /> Modifier
+                            <Edit className="h-4 w-4 text-blue-600" /> {t("edit")}
                           </Button>
                         </Link>
                         <Button
@@ -613,7 +616,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           className="h-8 w-20"
                           disabled={deletingId === transfusion._id}
                         >
-                          {deletingId === transfusion._id ? "..." : "Supprimer"}
+                          {deletingId === transfusion._id ? "..." : t("delete")}
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -627,45 +630,52 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
 
       <div className="flex items-center justify-between text-sm text-gray-600">
         <p>
-          Affichage de {filteredTransfusions.length} transfusions{" "}
-          {searchQuery.trim() ? `correspondant à "${searchQuery}"` : "programmées pour aujourd'hui"}
+          {searchQuery.trim()
+            ? t("showingTransfusionsMatching")
+                .replace("{count}", filteredTransfusions.length.toString())
+                .replace("{total}", transfusions.length.toString())
+                .replace("{query}", searchQuery)
+            : t("showingTransfusionsScheduled")
+                .replace("{count}", filteredTransfusions.length.toString())}
           {completedTransfusions.length > 0 &&
-            ` (${completedTransfusions.length} terminées, ${pendingTransfusions.length} en attente)`}
+            " " + t("transfusionsSummary")
+              .replace("{completed}", completedTransfusions.length.toString())
+              .replace("{pending}", pendingTransfusions.length.toString())}
         </p>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-red-100 rounded-full"></div>
-            <span>Urgent</span>
+            <span>{t("urgente")}</span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-blue-100 rounded-full"></div>
-            <span>Normal</span>
+            <span>{t("normale")}</span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-green-100 rounded-full"></div>
-            <span>Terminé</span>
+            <span>{t("completed")}</span>
           </div>
         </div>
       </div>
       <div className="hidden print:block print-summary">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
-            <strong>Résumé :</strong> {filteredTransfusions.length} transfusions au total
+            <strong>Résumé :</strong> {t("totalOrders").replace("{count}", filteredTransfusions.length.toString())}
             {completedTransfusions.length > 0 &&
-              ` (${completedTransfusions.length} terminées, ${pendingTransfusions.length} en attente)`}
+              ` (${completedTransfusions.length} ${t("ordersDelivered")})`}
           </div>
           <div style={{ display: "flex", gap: "15pt" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "3pt" }}>
               <div style={{ width: "8pt", height: "8pt", backgroundColor: "#fecaca", borderRadius: "50%" }}></div>
-              <span>Urgent</span>
+              <span>{t("urgente")}</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "3pt" }}>
               <div style={{ width: "8pt", height: "8pt", backgroundColor: "#dbeafe", borderRadius: "50%" }}></div>
-              <span>Normal</span>
+              <span>{t("normale")}</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "3pt" }}>
               <div style={{ width: "8pt", height: "8pt", backgroundColor: "#dcfce7", borderRadius: "50%" }}></div>
-              <span>Terminé</span>
+              <span>{t("completed")}</span>
             </div>
           </div>
         </div>

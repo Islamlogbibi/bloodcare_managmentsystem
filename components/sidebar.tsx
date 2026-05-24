@@ -42,7 +42,7 @@ export function Sidebar() {
         size="icon"
         className="fixed top-4 left-4 z-50 md:hidden no-print"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        aria-label={isMobileOpen ? "Fermer le menu de navigation" : "Ouvrir le menu de navigation"}
+        aria-label={isMobileOpen ? t("closeNav") : t("openNav")}
         aria-expanded={isMobileOpen}
         aria-controls="sidebar-navigation"
       >
@@ -66,6 +66,7 @@ export function Sidebar() {
           "fixed md:relative inset-y-0 left-0",
           isCollapsed ? "w-16" : "w-64",
           isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
+          "print:hidden",
         )}
         role="navigation"
         aria-label="Navigation principale"
@@ -84,7 +85,7 @@ export function Sidebar() {
             {!isCollapsed && (
               <div className="animate-fade-in">
                 <h1 className="text-lg font-bold text-white">BloodCare</h1>
-                <p className="text-xs text-red-100">Système de Gestion</p>
+                <p className="text-xs text-red-100">{t("managementSystem")}</p>
               </div>
             )}
           </div>
@@ -96,7 +97,7 @@ export function Sidebar() {
             variant="ghost"
             size="sm"
             onClick={() => setIsCollapsed(!isCollapsed)}
-            aria-label={isCollapsed ? "Développer la barre latérale" : "Réduire la barre latérale"}
+            aria-label={isCollapsed ? t("expandSidebar") : t("collapseSidebar")}
             className="h-8 w-8 p-0 hover:bg-gray-100"
           >
             <Menu className="h-4 w-4" />

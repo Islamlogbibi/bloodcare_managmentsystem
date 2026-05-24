@@ -348,12 +348,12 @@ export default function CalendarHistoryPage() {
         {!loading && patients.length > 0 && (
           <div ref={tableRef} className="space-y-4">
             <div className="hidden print:block print-header alg">
-              <h1>CHU ANNABA SERVICE D'HÉMOBIOLOGIE ET TRANSFUSION SANGUINE</h1>
-              <h1>CHEF DE SERVICE PR. BROUK HACENE</h1>
+              <h1>{t("chuAnnaba")}</h1>
+              <h1>{t("chefDeService")}</h1>
             </div>
             <div className="hidden print:block print-header">
-              <h1>Rapport quotidien des transfusions</h1>
-              <p>Programme des transfusions sanguines - </p>
+              <h1>{t("dailyTransfusionReport")}</h1>
+              <p>{t("transfusionSchedule")} - </p>
               <h3>
                 {selectedDate.toLocaleDateString("fr-FR", {
                   weekday: "long",
@@ -364,7 +364,7 @@ export default function CalendarHistoryPage() {
               </h3>
             </div>
             <div className="hidden print:block print-header">
-              <strong>Résumé :</strong> {patients.length} commandes au total
+              <strong>Résumé :</strong> {t("totalOrders").replace("{count}", patients.length.toString())}
             </div>
 
             <div className="rounded-lg border border-gray-200 overflow-hidden">
@@ -373,7 +373,7 @@ export default function CalendarHistoryPage() {
                   <TableRow>
                     <TableHead className="font-semibold text-gray-900">{t("hdist")}</TableHead>
                     <TableHead className="font-semibold text-gray-900">{t("hreceived")}</TableHead>
-                    <TableHead className="font-semibold text-gray-900">Patient</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("patient")}</TableHead>
                     <TableHead className="font-semibold text-gray-900">{t("bloodType")}</TableHead>
                     <TableHead className="font-semibold text-gray-900">{t("phenotype")}</TableHead>
                     <TableHead className="font-semibold text-gray-900">{t("hasF")}</TableHead>
@@ -382,9 +382,9 @@ export default function CalendarHistoryPage() {
                     <TableHead className="font-semibold text-gray-900">{t("priority")}</TableHead>
                     <TableHead className="font-semibold text-gray-900">{t("bags")}</TableHead>
                     <TableHead className="font-semibold text-gray-900">Hb</TableHead>
-                    <TableHead className="font-semibold text-gray-900">Don</TableHead>
+                    <TableHead className="font-semibold text-gray-900">{t("don")}</TableHead>
                     <TableHead className="font-semibold text-gray-900 print:hidden">{t("actions")}</TableHead>
-                    <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Presence</TableHead>
+                    <TableHead className="font-semibold text-gray-900 hidden print:table-cell">{t("presence")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -423,7 +423,7 @@ export default function CalendarHistoryPage() {
                               ? "bg-red-100 text-red-800"
                               : "bg-blue-100 text-blue-800"
                           }>
-                            {transfusion.priority === "urgent" ? "urgente" : "normale"}
+                            {transfusion.priority === "urgent" ? t("urgente") : t("normale")}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-center">{poches || "-"}</TableCell>
@@ -447,18 +447,18 @@ export default function CalendarHistoryPage() {
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
+                                <AlertDialogTitle>{t("confirmDelete")}</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Êtes-vous sûr de vouloir supprimer cette transfusion pour {p.firstName} {p.lastName} ? Cette action est irréversible.
+                                  {t("confirmDeleteTransfusion")} ({p.firstName} {p.lastName})
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
-                                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                                <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
                                 <AlertDialogAction
                                   className="bg-red-600 hover:bg-red-700"
                                   onClick={() => handleDeleteTransfusion(transfusion._id)}
                                 >
-                                  Supprimer
+                                  {t("delete")}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>

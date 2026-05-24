@@ -232,7 +232,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
                   <ArrowUpDown className="ml-1 h-4 w-4" />
                 </div>
               </TableHead>
-              <TableHead className="font-semibold text-gray-900 print:hidden">ACTIONS</TableHead>
+              <TableHead className="font-semibold text-gray-900 print:hidden">{t("actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -297,7 +297,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
                     <div className="flex items-center space-x-2">
                       <Link href={`/patients/${patient._id}/view`}>
                         <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
-                          Voir
+                          {t("view")}
                         </Button>
                       </Link>
                       <Link href={`/patients/${patient._id}/edit`}>
@@ -326,13 +326,13 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
       </div>
 
       <div className="flex items-center justify-between text-sm text-gray-600">
-        <p>Affichage de {patients.length} patients</p>
+        <p>{t("showingPatients").replace("{count}", patients.length.toString())}</p>
         <div className="flex items-center space-x-2">
           <Button variant="outline" size="sm" disabled>
-            Précédent
+            {t("previous")}
           </Button>
           <Button variant="outline" size="sm">
-            Suivant
+            {t("next")}
           </Button>
         </div>
       </div>

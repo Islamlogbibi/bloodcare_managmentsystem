@@ -9,8 +9,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { updatehbf } from "@/app/lib/actions";
 import { toast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/language-context";
 
 export function Hbfform({ history, patientId, transfusionId, isEditing = false }: any) {
+  const { t } = useLanguage();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [hbf, setHbf] = useState(history?.hbf?.toString() ?? "");
@@ -19,10 +21,10 @@ export function Hbfform({ history, patientId, transfusionId, isEditing = false }
     setIsLoading(true);
     try {
       await updatehbf({ transfusionId: transfusionId || history?._id || history?.transfusionId, hbf: parseFloat(hbf) });
-      toast({ title: "Mis à jour", description: "HbF mis à jour." });
+      toast({ title: t("misAJour"), description: t("hbfUpdated") });
       router.push(`/patients/${patientId}/history`);
     } catch {
-      toast({ title: "Erreur", description: "Veuillez réessayer.", variant: "destructive" });
+      toast({ title: t("error"), description: t("failedToSavePatient"), variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -30,9 +32,14 @@ export function Hbfform({ history, patientId, transfusionId, isEditing = false }
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="space-y-8">
+      {isEditing && (
+        <h2 className="text-3xl font-bold tracking-tight">
+          {t("modifierHbPostTransfusion")}
+        </h2>
+      )}
       <Card>
         <CardHeader>
-          <CardTitle>Hb Post Transfusion {history?.scheduledTime || history?.date ? `du ${new Date(history.scheduledTime || history.date).toLocaleDateString()}` : ""}</CardTitle>
+          <CardTitle>{t("hbPostTransfusion")} {history?.scheduledTime || history?.date ? `${t("hbPostTransfusionOf")} ${new Date(history.scheduledTime || history.date).toLocaleDateString()}` : ""}</CardTitle>
         </CardHeader>
         <CardContent> 
           <Input
@@ -46,7 +53,7 @@ export function Hbfform({ history, patientId, transfusionId, isEditing = false }
       </Card>
       <div className="flex justify-end">
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? "Enregistrement..." : "Mettre à jour"}
+          {isLoading ? t("saving") : t("update")}
         </Button>
       </div>
     </form>

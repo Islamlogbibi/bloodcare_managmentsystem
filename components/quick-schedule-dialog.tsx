@@ -47,7 +47,6 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
         scheduledDate: scheduledDate.toISOString(),
         scheduledTime,
         priority,
-        bloodUnits: 2,
         notes: `Planifié rapidement comme cas ${priority} pour ${patient.firstName} ${patient.lastName}`,
       })
 

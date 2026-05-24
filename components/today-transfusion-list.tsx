@@ -319,10 +319,10 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                     const hasF = !!transfusion.hasF
                     const hasC = !!transfusion.hasC
                     const hasL = !!transfusion.hasL
-                    const poches = transfusion.poches || transfusion.bloodUnits || "-"
+                    const poches = transfusion.poches ?? transfusion.bloodUnits ?? null
                     const hb = transfusion.hb || "-"
                     const description = transfusion.description || transfusion.notes || "-"
-                    
+
                     return (
                       <>
                         <TableCell className="text-center">
@@ -364,7 +364,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                         </TableCell>
                         <TableCell className="font-semibold">{poches}</TableCell>
                         <TableCell className="font-semibold">{hb}</TableCell>
-                        <TableCell>{description}</TableCell>
+                        <TableCell>{transfusion.don ?? null}</TableCell>
                       </>
                     )
                   })()}
@@ -522,10 +522,10 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                         const hasF2 = !!transfusion.hasF
                         const hasC2 = !!transfusion.hasC
                         const hasL2 = !!transfusion.hasL
-                        const poches2 = transfusion.poches || transfusion.bloodUnits || "-"
+                        const poches2 = transfusion.poches ?? transfusion.bloodUnits ?? null
                         const hb2 = transfusion.hb || "-"
                         const description2 = transfusion.description || transfusion.notes || "-"
-                        
+
                         return (
                           <>
                             <TableCell className="text-center">
@@ -567,11 +567,11 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                             </TableCell>
                             <TableCell className="font-semibold">{poches2}</TableCell>
                             <TableCell className="font-semibold">{hb2}</TableCell>
-                            <TableCell>{description2}</TableCell>
+                            <TableCell>{transfusion.don ?? null}</TableCell>
                           </>
                         )
                       })()}
- 
+
                       <TableCell className="hidden print:table-cell">
                         <Badge className="bg-green-100 text-green-800">{t("present")}</Badge>
                       </TableCell>
@@ -589,7 +589,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                             </Button>
                           )}
                         </div>
- 
+
                         <div className="flex items-center space-x-2">
                           {transfusion.status !== "completed" && (
                             <Button
@@ -632,11 +632,11 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
         <p>
           {searchQuery.trim()
             ? t("showingTransfusionsMatching")
-                .replace("{count}", filteredTransfusions.length.toString())
-                .replace("{total}", transfusions.length.toString())
-                .replace("{query}", searchQuery)
+              .replace("{count}", filteredTransfusions.length.toString())
+              .replace("{total}", transfusions.length.toString())
+              .replace("{query}", searchQuery)
             : t("showingTransfusionsScheduled")
-                .replace("{count}", filteredTransfusions.length.toString())}
+              .replace("{count}", filteredTransfusions.length.toString())}
           {completedTransfusions.length > 0 &&
             " " + t("transfusionsSummary")
               .replace("{completed}", completedTransfusions.length.toString())

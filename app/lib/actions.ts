@@ -272,7 +272,7 @@ export async function scheduleTransfusion(transfusionData: any) {
       scheduledDate,
       scheduledTime,
       priority: transfusionData.priority,
-      bloodUnits: transfusionData.bloodUnits || 0,
+      bloodUnits: transfusionData.bloodUnits ?? null,
       notes: transfusionData.notes || "",
       transfusionId: `TRN${Date.now().toString().slice(-6)}`,
       status: "scheduled",

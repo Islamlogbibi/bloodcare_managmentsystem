@@ -44,7 +44,6 @@ export function Schedule({ patient, children }: QuickScheduleDialogProps) {
         scheduledDate: scheduledDate.toISOString(),
         scheduledTime,
         priority,
-        bloodUnits: 2,
         notes: `Quick scheduled as ${priority} case for ${patient.firstName} ${patient.lastName}`,
       })
 

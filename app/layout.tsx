@@ -69,6 +69,7 @@ export default function RootLayout({
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning className="ltr">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -77,11 +78,11 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <LanguageProvider>
             <LanguageInitializer />
-            <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+            <div className="flex min-h-screen min-w-0 bg-gradient-to-br from-gray-50 to-gray-100">
               <Sidebar />
-              <div className="flex flex-col flex-1 overflow-hidden">
+              <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
                 <Header />
-                <main className="flex-1 overflow-x-hidden overflow-y-auto" role="main" aria-label="Main content">
+                <main className="flex-1 min-w-0 overflow-x-hidden overflow-y-auto" role="main" aria-label="Main content">
                   {children}
                 </main>
               </div>

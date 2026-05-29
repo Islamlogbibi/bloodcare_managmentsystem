@@ -56,7 +56,9 @@ export async function GET(request: NextRequest) {
               $sum: { $cond: [{ $eq: ["$status", "completed"] }, 1, 0] },
             },
             totalBloodUnits: {
-              $sum: { $ifNull: ["$patient.poches", 0] },
+              $sum: {
+                $ifNull: ["$bloodUnits", { $ifNull: ["$poches", 0] }],
+              },
             },
           },
         },
@@ -120,7 +122,11 @@ export async function GET(request: NextRequest) {
           $group: {
             _id: "$priority",
             count: { $sum: 1 },
-            totalBloodUnits: { $sum: { $ifNull: ["$patient.poches", 0] } },
+            totalBloodUnits: {
+              $sum: {
+                $ifNull: ["$bloodUnits", { $ifNull: ["$poches", 0] }],
+              },
+            },
           },
         },
         {
@@ -218,7 +224,11 @@ export async function GET(request: NextRequest) {
           $group: {
             _id: { $dateToString: { format: "%Y-%m", date: "$scheduledDate" } },
             transfusions: { $sum: 1 },
-            totalBloodUnits: { $sum: { $ifNull: ["$patient.poches", 0] } },
+            totalBloodUnits: {
+              $sum: {
+                $ifNull: ["$bloodUnits", { $ifNull: ["$poches", 0] }],
+              },
+            },
             completed: {
               $sum: { $cond: [{ $eq: ["$status", "completed"] }, 1, 0] },
             },

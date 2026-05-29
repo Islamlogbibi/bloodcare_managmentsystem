@@ -38,6 +38,7 @@ export function Schedule({ patient, children }: QuickScheduleDialogProps) {
       const today = new Date()
       const scheduledDate = priority === "today" ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000)
       const scheduledTime = priority === "today" ? "14:00" : "09:00"
+      const scheduledTimeText = priority === "today" ? t("todayAtTwo") : t("tomorrowAtNine")
       priority = "regular"
       await scheduleTransfusion({
         patientId: patient._id,
@@ -47,11 +48,9 @@ export function Schedule({ patient, children }: QuickScheduleDialogProps) {
         notes: `Quick scheduled as ${priority} case for ${patient.firstName} ${patient.lastName}`,
       })
 
-      const scheduledTimeText = "demain à 9h00"
-
       toast({
         title: t("scheduleTransfusion"),
-        description: `${patient.firstName} ${patient.lastName} programmé pour ${scheduledTimeText}`,
+        description: `${patient.firstName} ${patient.lastName} ${t("scheduledFor")} ${scheduledTimeText}`,
       })
 
       setIsOpen(false)
@@ -60,7 +59,7 @@ export function Schedule({ patient, children }: QuickScheduleDialogProps) {
       console.error("Scheduling error:", error)
       toast({
         title: t("error"),
-        description: "Échec de la programmation de la transfusion. Veuillez réessayer.",
+        description: t("failedScheduling"),
         variant: "destructive",
       })
     } finally {
@@ -78,20 +77,21 @@ export function Schedule({ patient, children }: QuickScheduleDialogProps) {
             {t("scheduleTransfusion")}
           </DialogTitle>
           <DialogDescription>
-            Planifier une transfusion sanguine pour {patient.firstName} {patient.lastName}
+            {t("scheduleTransfusionForPatient")}
+            {patient.firstName} {patient.lastName}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-medium">Patient :</span>
+              <span className="font-medium">{t("patient")} :</span>
               <span>
                 {patient.firstName} {patient.lastName}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="font-medium">Groupe Sanguin :</span>
+              <span className="font-medium">{t("bloodType")} :</span>
               <Badge variant="outline" className="border-red-200 text-red-700">
                 {patient.bloodType}
               </Badge>
@@ -99,7 +99,7 @@ export function Schedule({ patient, children }: QuickScheduleDialogProps) {
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-medium text-gray-900">Sélectionner la Priorité :</h4>
+            <h4 className="font-medium text-gray-900">{t("selectPriority")}</h4>
 
             <Button
               variant="outline"
@@ -110,7 +110,7 @@ export function Schedule({ patient, children }: QuickScheduleDialogProps) {
               <div className="flex items-center gap-3">
                 <div className="text-left">
                   <div className="font-medium">{t("tomorrow")}</div>
-                  <div className="text-sm text-gray-500">Demain</div>
+                  <div className="text-sm text-gray-500">{t("tomorrow")}</div>
                 </div>
               </div>
             </Button>
@@ -124,7 +124,7 @@ export function Schedule({ patient, children }: QuickScheduleDialogProps) {
               <div className="flex items-center gap-3">
                 <div className="text-left">
                   <div className="font-medium">{t("today")}</div>
-                  <div className="text-sm text-gray-500">Aujourd'hui</div>
+                  <div className="text-sm text-gray-500">{t("today")}</div>
                 </div>
               </div>
             </Button>

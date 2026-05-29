@@ -48,14 +48,14 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
       await scheduleTransfusion(transfusionData)
       toast({
         title: t("scheduleTransfusion"),
-        description: "Transfusion scheduled successfully",
+        description: t("scheduleSuccess"),
       })
 
       router.push("/transfusions/today")
     } catch (error) {
       toast({
         title: t("error"),
-        description: "An error occurred. Please try again.",
+        description: t("scheduleError"),
         variant: "destructive",
       })
     } finally {
@@ -67,7 +67,7 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
     <form action={onSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Patient</Label>
+          <Label>{t("patient")}</Label>
           <Input value={`${patient.firstName} ${patient.lastName}`} disabled />
         </div>
         <div className="space-y-2">
@@ -108,7 +108,7 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="priority">Priority *</Label>
+          <Label htmlFor="priority">{t("priority")} *</Label>
           <Select name="priority" defaultValue="regular">
             <SelectTrigger>
               <SelectValue placeholder={t("selectType")} />
@@ -120,7 +120,7 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
           </Select>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="bloodUnits">Blood Units *</Label>
+          <Label htmlFor="bloodUnits">{t("bloodUnits")} *</Label>
           <Input id="bloodUnits" name="bloodUnits" type="number" min="1" max="10" defaultValue="1" required />
         </div>
       </div>
@@ -131,7 +131,7 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
           id="notes"
           name="notes"
           rows={4}
-          placeholder="Enter any special instructions or notes about the transfusion..."
+          placeholder={t("notesPlaceholder")}
         />
       </div>
 

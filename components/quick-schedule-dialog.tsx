@@ -41,6 +41,7 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
       const today = new Date()
       const scheduledDate = priority === "urgent" ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000)
       const scheduledTime = priority === "urgent" ? "14:00" : "09:00"
+      const scheduledTimeText = priority === "urgent" ? t("todayAtTwo") : t("tomorrowAtNine")
 
       await scheduleTransfusion({
         patientId: patient._id,
@@ -50,11 +51,9 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
         notes: `Planifié rapidement comme cas ${priority} pour ${patient.firstName} ${patient.lastName}`,
       })
 
-      const scheduledTimeText = priority === "urgent" ? "aujourd'hui à 14h00" : "demain à 09h00"
-
       toast({
         title: t("scheduleTransfusion"),
-        description: `${patient.firstName} ${patient.lastName} planifié pour ${scheduledTimeText}`,
+        description: `${patient.firstName} ${patient.lastName} ${t("scheduledFor")} ${scheduledTimeText}`,
       })
 
       setIsOpen(false)
@@ -63,7 +62,7 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
       console.error("Erreur de planification:", error)
       toast({
         title: t("error"),
-        description: "Échec de la planification de la transfusion. Veuillez réessayer.",
+        description: t("failedScheduling"),
         variant: "destructive",
       })
     } finally {
@@ -81,20 +80,21 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
             {t("scheduleTransfusion")}
           </DialogTitle>
           <DialogDescription>
-            Planifier une transfusion sanguine pour {patient.firstName} {patient.lastName}
+            {t("scheduleTransfusionForPatient")}
+            {patient.firstName} {patient.lastName}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-medium">Patient:</span>
+              <span className="font-medium">{t("patient")}:</span>
               <span>
                 {patient.firstName} {patient.lastName}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="font-medium">Groupe Sanguin:</span>
+              <span className="font-medium">{t("bloodType")}:</span>
               <Badge variant="outline" className="border-red-200 text-red-700">
                 {patient.bloodType}
               </Badge>
@@ -102,7 +102,7 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-medium text-gray-900">Sélectionner la Priorité:</h4>
+            <h4 className="font-medium text-gray-900">{t("selectPriority")}</h4>
             <Schedule patient={patient}>
               <Button
                 variant="outline"
@@ -113,7 +113,7 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
                   <Clock className="h-5 w-5 text-blue-600" />
                   <div className="text-left">
                     <div className="font-medium">{t("regular")}</div>
-                    <div className="text-sm text-gray-500">Demain</div>
+                    <div className="text-sm text-gray-500">{t("tomorrow")}</div>
                   </div>
                 </div>
               </Button>
@@ -128,7 +128,7 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
                 <AlertTriangle className="h-5 w-5 text-red-600" />
                 <div className="text-left">
                   <div className="font-medium">{t("urgent")}</div>
-                  <div className="text-sm text-gray-500">Aujourd'hui</div>
+                  <div className="text-sm text-gray-500">{t("today")}</div>
                 </div>
               </div>
             </Button>
